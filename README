@@ -1,17 +1,12 @@
-Motivation
-----------
-The goal of the Ruboss Framework is to automate much of the plumbing necessary to use Adobe Flex and Adobe AIR with Ruby on Rails. 
-The Ruboss Framework brings the design principles and productivity of Rails to Flex development, and makes integration with RESTful Rails controllers as simple as possible.
-
 Introduction
 -------------
-In this tutorial we will build a new application from scratch using the Ruboss Framework. This is made pretty simple thanks to the generators that accompany the framework. However, the real beauty is in the actual generated code which uses the framework -- this is clean Flex code, and it is very similar to the code you would write.
+In this tutorial we will build a new Rails application from scratch using the Ruboss Framework. This is made pretty simple thanks to the generators that accompany the framework. However, the real beauty is in the actual generated code which uses the framework -- this is clean Flex code, and it is very similar to the code you would write.
 
 Assumptions
 -----------
-The following steps have been tried with Flex Builder 3 on Mac OS X. You should have Git, RubyOnRails *2.1* and MySQL 5.0+ installed for the RubyOnRails portion of this tutorial and Flex Builder 3 if you intend to edit your Flex code using it (NOTE: this is not required if you have Flex SDK installed: make sure you have added Flex SDK bin directory to your $PATH variable so that you can invoke mxmlc from the command line). This tutorial assumes that you are going to install the Ruboss Rails plugin directly from github (which is why Git is necessary). If you install the plugin in some other way then you don't need Git.
+The following steps have been tried with Flex Builder 3 on Mac OS X. You should have Git, Ruby on Rails *2.1* and MySQL 5.0+ installed for the Ruby on Rails portion of this tutorial and Flex Builder 3 if you intend to edit your Flex code using it (NOTE: this is not required if you have Flex SDK installed: make sure you have added Flex SDK bin directory to your $PATH variable so that you can invoke mxmlc from the command line). This tutorial assumes that you are going to install the Ruboss Rails plugin directly from github (which is why Git is necessary). If you install the plugin in some other way then you don't need Git.
 
-Developing a Flex application that talks to RubyOnRails with Ruboss Framework
+Developing a Flex application that talks to Ruby on Rails with Ruboss Framework
 -----------------------------------------------------------------------------
 This application will be called pomodo:
 
@@ -155,7 +150,7 @@ OK, you are all done, hit the run button and you should see the same application
 
 To recap: converting between a Flex application that talks to Rails server using XML-over-HTTP into an AIR application that's using local SQL database is just a matter of running one command. A command that only changes the way our application is initialized, NOT any of the code used to actually manipulate projects and tasks.
 
-Getting Pomodo AIR application to talk to RubyOnRails again!
+Getting Pomodo AIR application to talk to Ruby on Rails again!
 ------------------------------------------------------------
 One nice thing about having much of the plumbing abstracted away is that you can now have your brand new AIR application talking to the Rails server again.
 

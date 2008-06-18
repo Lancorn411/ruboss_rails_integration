@@ -97,8 +97,11 @@ module ActiveRecord
       alias_method :old_find, :find
 
       def find(*args)
-        results = old_find(*args)
-        results.empty? ? ArrayWithClassyToXml.new(self.class_name.tableize) : results        
+        result = old_find(*args)
+        if result.class == Array and result.empty?
+          result = ArrayWithClassyToXml.new(self.class_name.tableize)
+        end
+        result
       end
     end
   end
