@@ -24,7 +24,7 @@
 <% elsif attribute.type == :datetime -%>
     <%= class_name.downcase_first_letter %>.<%= attribute.flex_name %> = <%= attribute.flex_name %>DateTimeTextInput.date;
 <% elsif attribute.type == :date -%>
-    <%= class_name.downcase_first_letter %>.<%= attribute.flex_name %> = <%= attribute.flex_name %>DateChooser.selectedDate;
+    <%= class_name.downcase_first_letter %>.<%= attribute.flex_name %> = <%= attribute.flex_name %>DateField.selectedDate;
 <% else -%>
     <%= class_name.downcase_first_letter %>.<%= attribute.flex_name %> = <%= attribute.flex_type %>(<%= attribute.flex_name %>TextInput.text);
 <% end -%>
@@ -33,7 +33,7 @@
 <% for model in belongs_tos -%>
     <%= class_name.downcase_first_letter %>.<%= model.camelcase(:lower) %> = <%= model.camelcase %>(<%= model.camelcase(:lower) %>ComboBox.selectedItem);
 <% end -%>
-    Ruboss.models.create(<%= class_name.downcase_first_letter %>, on<%= class_name %>Create);
+    <%= class_name.downcase_first_letter %>.create(on<%= class_name %>Create);
   }
 
   public function update<%= class_name %>():void {
@@ -47,7 +47,7 @@
 <% elsif attribute.type == :datetime -%>
     edited<%= class_name %>.<%= attribute.flex_name %> = <%= attribute.flex_name %>DateTimeTextInput.date;
 <% elsif attribute.type == :date -%>
-    edited<%= class_name %>.<%= attribute.flex_name %> = <%= attribute.flex_name %>DateChooser.selectedDate;
+    edited<%= class_name %>.<%= attribute.flex_name %> = <%= attribute.flex_name %>DateField.selectedDate;
 <% else -%>
     edited<%= class_name %>.<%= attribute.flex_name %> = <%= attribute.flex_type %>(<%= attribute.flex_name %>TextInput.text);
 <% end -%>
@@ -56,11 +56,11 @@
 <% for model in belongs_tos -%>
     edited<%= class_name %>.<%= model.camelcase(:lower) %> = <%= model.camelcase %>(<%= model.camelcase(:lower) %>ComboBox.selectedItem);
 <% end -%>
-    Ruboss.models.update(edited<%= class_name %>, on<%= class_name %>Update);
+    edited<%= class_name %>.update(on<%= class_name %>Update);
   }
 
   public function destroy<%= class_name %>():void {
-    Ruboss.models.destroy(edited<%= class_name %>, on<%= class_name %>Destroy);
+    edited<%= class_name %>.destroy(on<%= class_name %>Destroy);
   }
   
   private function on<%= class_name %>Select():void {
@@ -157,7 +157,7 @@
         <rcomponents:DateTimeTextInput id="<%= attribute.flex_name %>DateTimeTextInput" width="100%"
           date="{edited<%= class_name %>.<%= attribute.flex_name %>}"/>
 <% elsif attribute.type == :date -%>
-        <mx:DateChooser id="<%= attribute.flex_name %>DateChooser" width="100%"
+        <mx:DateField id="<%= attribute.flex_name %>DateField" width="100%"
           selectedDate="{edited<%= class_name %>.<%= attribute.flex_name %>}"/>
 <% else -%>
         <mx:TextInput id="<%= attribute.flex_name %>TextInput" width="100%"
