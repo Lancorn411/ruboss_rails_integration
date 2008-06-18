@@ -154,10 +154,10 @@
         <mx:TextArea id="<%= attribute.flex_name %>TextArea" width="100%" height="200"
           text="{edited<%= class_name %>.<%= attribute.flex_name %>}"/>
 <% elsif attribute.type == :datetime -%>
-        <rcomponents:DateTimeTextInput id="<%= attribute.flex_name %>DateTimeTextInput" width="100%"
+        <rcomponents:DateTimeTextInput id="<%= attribute.flex_name %>DateTimeTextInput" width="200"
           date="{edited<%= class_name %>.<%= attribute.flex_name %>}"/>
 <% elsif attribute.type == :date -%>
-        <mx:DateField id="<%= attribute.flex_name %>DateField" width="100%"
+        <mx:DateField id="<%= attribute.flex_name %>DateField"
           selectedDate="{edited<%= class_name %>.<%= attribute.flex_name %>}"/>
 <% else -%>
         <mx:TextInput id="<%= attribute.flex_name %>TextInput" width="100%"
