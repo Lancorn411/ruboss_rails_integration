@@ -58,8 +58,8 @@ class ArrayWithClassyToXml < Array
   def initialize(class_name)
     @class_name = class_name
   end
-  def to_xml
-    empty? ? "<#{@class_name} type=\"array\"/>" : super
+  def to_fxml
+    empty? ? "<#{@class_name} type=\"array\"/>" : to_xml
   end
 end
 
@@ -67,23 +67,17 @@ module ActiveSupport
   module CoreExtensions
     module Hash
       module Conversions
-        unless method_defined? :old_to_xml 
-          alias_method :old_to_xml, :to_xml
-          def to_xml(options = {})
-            options.merge!(:dasherize => false)
-            old_to_xml(options)
-          end
+        def to_fxml(options = {})
+          options.merge!(:dasherize => false)
+          to_xml(options)
         end
       end
     end
     module Array
       module Conversions
-        unless method_defined? :old_to_xml 
-          alias_method :old_to_xml, :to_xml
-          def to_xml(options = {})
-            options.merge!(:dasherize => false)
-            old_to_xml(options)
-          end
+        def to_fxml(options = {})
+          options.merge!(:dasherize => false)
+          to_xml(options)
         end
       end
     end
@@ -107,16 +101,13 @@ module ActiveRecord
   end
   
   module Serialization
-    unless method_defined? :old_to_xml 
-      alias_method :old_to_xml, :to_xml
-      def to_xml(options = {})
-        options.merge!(:dasherize => false)
-        default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]
-        options[:except] = (options[:except] ? options[:except] + default_except : default_except)
-        options[:methods] = (options[:methods] ? Array(options[:methods]) + 
-          default_xml_methods : default_xml_methods) if default_xml_methods
-          old_to_xml(options)
-      end
+    def to_fxml(options = {})
+      options.merge!(:dasherize => false)
+      default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]
+      options[:except] = (options[:except] ? options[:except] + default_except : default_except)
+      options[:methods] = (options[:methods] ? Array(options[:methods]) + 
+        default_fxml_methods : default_fxml_methods) if default_fxml_methods
+      to_xml(options)
     end
   end
   
@@ -166,13 +157,13 @@ module ActiveRecord
   end
   
   class Base
-    # Add a 'default_xml_methods' method to ActiveRecord::Base
+    # Add a 'default_fxml_methods' method to ActiveRecord::Base
     # This is used to send a set of default :methods to #to_xml
     # for this class.
     # Like this:
     #
     # class SomeModel < ActiveRecord::Base
-    #   default_xml_methods :one, :is_true?
+    #   default_fxml_methods :one, :is_true?
     #
     #   def one
     #     1
@@ -195,12 +186,12 @@ module ActiveRecord
     #   <is_true type="boolean">true</is_true>
     # </someModel>
     # >>
-    def self.default_xml_methods(*args)
-      @@default_xml_methods = args      
+    def self.default_fxml_methods(*args)
+      @@default_fxml_methods = args      
     end
     
-    def default_xml_methods
-      @@default_xml_methods if defined?(@@default_xml_methods)
+    def default_fxml_methods
+      @@default_fxml_methods if defined?(@@default_fxml_methods)
     end
   end
 end
