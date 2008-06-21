@@ -105,8 +105,6 @@ module ActiveRecord
       options.merge!(:dasherize => false)
       default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]
       options[:except] = (options[:except] ? options[:except] + default_except : default_except)
-      options[:methods] = (options[:methods] ? Array(options[:methods]) + 
-        default_fxml_methods : default_fxml_methods) if default_fxml_methods
       to_xml(options)
     end
   end
@@ -131,24 +129,21 @@ module ActiveRecord
   # Add more extensive reporting on errors including field name along with a message
   # when errors are serialized to XML
   class Errors
-    unless method_defined? :old_to_xml 
-      alias_method :old_to_xml, :to_xml
-      def to_xml(options={})
-        options[:root] ||= "errors"
-        options[:indent] ||= 2
-        options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
-        options[:builder].instruct! unless options.delete(:skip_instruct)
-        options[:builder].errors do |e|
-          # The @errors instance variable is a Hash inside the Errors class
-          @errors.each_key do |attr|
-            @errors[attr].each do |msg|
-              next if msg.nil?
-              if attr == "base"
-                options[:builder].error("message" => msg)
-              else
-                fullmsg = @base.class.human_attribute_name(attr) + ' ' + msg
-                options[:builder].error("field" => attr, "message" => fullmsg)
-              end
+    def to_fxml(options={})
+      options[:root] ||= "errors"
+      options[:indent] ||= 2
+      options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
+      options[:builder].instruct! unless options.delete(:skip_instruct)
+      options[:builder].errors do |e|
+        # The @errors instance variable is a Hash inside the Errors class
+        @errors.each_key do |attr|
+          @errors[attr].each do |msg|
+            next if msg.nil?
+            if attr == "base"
+              options[:builder].error("message" => msg)
+            else
+              fullmsg = @base.class.human_attribute_name(attr) + ' ' + msg
+              options[:builder].error("field" => attr, "message" => fullmsg)
             end
           end
         end
