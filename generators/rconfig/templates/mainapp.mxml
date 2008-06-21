@@ -9,12 +9,18 @@
 <% if use_air -%>
       import org.ruboss.services.air.AIRServiceProvider;
 <% end -%>
+			import org.ruboss.Ruboss;
       import <%= base_package %>.controllers.<%= command_controller_name %>;
 
       private function init():void {
 <% if use_air -%>
         <%= command_controller_name %>.initialize([AIRServiceProvider], AIRServiceProvider.ID, "<%= base_package %>");
 <% else -%>
+        if(Application.application.parameters.authenticity_token)
+        {
+          Ruboss.defaultMetadata ||= {};          
+          Ruboss.defaultMetadata['authenticity_token'] = Application.application.parameters.authenticity_token;
+        }
         <%= command_controller_name %>.initialize();
 <% end -%>
       }
