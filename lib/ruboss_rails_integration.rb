@@ -156,42 +156,4 @@ module ActiveRecord
     end  
   end
   
-  class Base
-    # Add a 'default_fxml_methods' method to ActiveRecord::Base
-    # This is used to send a set of default :methods to #to_xml
-    # for this class.
-    # Like this:
-    #
-    # class SomeModel < ActiveRecord::Base
-    #   default_fxml_methods :one, :is_true?
-    #
-    #   def one
-    #     1
-    #   end
-    #   
-    #   def is_true?
-    #     true
-    #   end
-    #
-    # end
-    #
-    # In the example above, .to_xml is now equivalent to writing .to_xml(:methods => [:one, :is_true?])
-    #
-    # $> script/console
-    # >> s = SomeModel.find(:first)
-    # >> puts s.to_xml
-    # <someModel>
-    #   ..... (regular old to_xml output goes here)
-    #   <one type="integer">one</always_true>
-    #   <is_true type="boolean">true</is_true>
-    # </someModel>
-    # >>
-    def self.default_fxml_methods(*args)
-      @@default_fxml_methods = args      
-    end
-    
-    def default_fxml_methods
-      @@default_fxml_methods if defined?(@@default_fxml_methods)
-    end
-  end
 end
