@@ -4,11 +4,11 @@ module RubossHelper
   # See http://code.google.com/p/swfobject/wiki/documentation for full details and documentation
   # of the swfobject js library.
   def swfobject(swf_url, params = {})
-    params.reverse_merge!({:width => '900',
-                           :height => '600',
+    params.reverse_merge!({:width => '100%',
+                           :height => '100%',
                            :id => 'flashContent',
                            :version => '9.0.0',
-                           :express_install_swf => nil,
+                           :express_install_swf => '/expressInstall.swf',
                            :flash_vars => nil,
                            :params => nil,
                            :attributes => nil,
@@ -43,7 +43,6 @@ module RubossHelper
         hash_or_string
       end
     end.compact
-
 
     swf_tag = javascript_tag do 
       "swfobject.embedSWF(#{js_params.join(',')})"
