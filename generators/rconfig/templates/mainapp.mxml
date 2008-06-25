@@ -16,10 +16,6 @@
 <% if use_air -%>
         <%= command_controller_name %>.initialize([AIRServiceProvider], AIRServiceProvider.ID, "<%= base_package %>");
 <% else -%>
-        if (Application.application.parameters.authenticity_token) {
-          Ruboss.defaultMetadata ||= {};          
-          Ruboss.defaultMetadata['authenticity_token'] = Application.application.parameters.authenticity_token;
-        }
         <%= command_controller_name %>.initialize();
 <% end -%>
       }
