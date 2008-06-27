@@ -19,9 +19,7 @@ require 'open-uri'
 
 class RconfigGenerator < Rails::Generator::Base
   include Ruboss::Configuration
-  
-  LATEST_FRAMEWORK_URL = "http://ruboss.com/files/ruboss-latest.swc"
-  
+    
   attr_reader :project_name, 
               :flex_project_name, 
               :base_package, 
@@ -90,10 +88,13 @@ class RconfigGenerator < Rails::Generator::Base
         
         m.directory "app/flex/#{base_folder}/components/generated"
         
-        if !options[:skip_framework] && !File.exist?("lib/ruboss-latest.swc")
-          puts "fetching latest framework binary from: #{LATEST_FRAMEWORK_URL} ..."
-          open("lib/ruboss-latest.swc","wb").write(open(LATEST_FRAMEWORK_URL).read)
-          puts "done. saved to lib/ruboss-latest.swc"
+        framework_distribution_url = "http://ruboss.com/releases/ruboss-#{FRAMEWORK_RELEASE}.swc"
+        framework_destination_file = "lib/ruboss-#{FRAMEWORK_RELEASE}.swc"
+        
+        if !options[:skip_framework] && !File.exist?(framework_destination_file)
+          puts "fetching #{FRAMEWORK_RELEASE} framework binary from: #{framework_distribution_url} ..."
+          open(framework_destination_file, "wb").write(open(framework_distribution_url).read)
+          puts "done. saved to #{framework_destination_file}"
         end
   
         m.file 'swfobject.js', 'public/javascripts/swfobject.js'
