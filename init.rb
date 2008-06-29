@@ -1,3 +1,4 @@
+require 'ruboss_version'
 require 'ruboss_rails_integration'
 
 ActionView::Base.send :include, RubossHelper

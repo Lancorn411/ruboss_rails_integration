@@ -3,9 +3,6 @@
 # Flex specific XML mime-type
 Mime::Type.register_alias "application/xml", :fxml
 
-# the following is rails 2.1 specific and doesn't really help to avoid protect_from_forgery problems
-#Mime::Type.unverifiable_types << :fxml
-
 # Flex friendly date, datetime formats
 ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(:flex => "%Y/%m/%d")
 ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(:flex => "%Y/%m/%d %H:%M:%S")
@@ -58,8 +55,8 @@ class ArrayWithClassyToXml < Array
   def initialize(class_name)
     @class_name = class_name
   end
-  def to_xml
-    empty? ? "<#{@class_name} type=\"array\"/>" : super
+  def to_fxml
+    empty? ? "<#{@class_name} type=\"array\"/>" : to_xml
   end
 end
 
@@ -67,24 +64,35 @@ module ActiveSupport
   module CoreExtensions
     module Hash
       module Conversions
-        unless method_defined? :old_to_xml 
-          alias_method :old_to_xml, :to_xml
-          def to_xml(options = {})
-            options.merge!(:dasherize => false)
-            old_to_xml(options)
-          end
+        def to_fxml(options = {})
+          options.merge!(:dasherize => false)
+          to_xml(options)
         end
       end
     end
     module Array
       module Conversions
-        unless method_defined? :old_to_xml 
-          alias_method :old_to_xml, :to_xml
-          def to_xml(options = {})
-            options.merge!(:dasherize => false)
-            old_to_xml(options)
-          end
+        def to_fxml(options = {})
+          options.merge!(:dasherize => false)
+          to_xml(options)
         end
+      end
+    end
+  end
+end
+
+module ActionController
+  class Base
+    alias_method :old_render, :render
+   
+    # so that we can have handling for :fxml option and write code like
+    # format.fxml  { render :fxml => @projects }
+    def render(options = nil, extra_options = {}, &block)
+      if xml = options[:fxml]
+        response.content_type ||= Mime::XML
+        render_for_text(xml.respond_to?(:to_fxml) ? xml.to_fxml : xml, options[:status])
+      else
+        old_render(options, extra_options, &block)
       end
     end
   end
@@ -107,16 +115,11 @@ module ActiveRecord
   end
   
   module Serialization
-    unless method_defined? :old_to_xml 
-      alias_method :old_to_xml, :to_xml
-      def to_xml(options = {})
-        options.merge!(:dasherize => false)
-        default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]
-        options[:except] = (options[:except] ? options[:except] + default_except : default_except)
-        options[:methods] = (options[:methods] ? Array(options[:methods]) + 
-          default_xml_methods : default_xml_methods) if default_xml_methods
-          old_to_xml(options)
-      end
+    def to_fxml(options = {})
+      options.merge!(:dasherize => false)
+      default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]
+      options[:except] = (options[:except] ? options[:except] + default_except : default_except)
+      to_xml(options)
     end
   end
   
@@ -140,24 +143,21 @@ module ActiveRecord
   # Add more extensive reporting on errors including field name along with a message
   # when errors are serialized to XML
   class Errors
-    unless method_defined? :old_to_xml 
-      alias_method :old_to_xml, :to_xml
-      def to_xml(options={})
-        options[:root] ||= "errors"
-        options[:indent] ||= 2
-        options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
-        options[:builder].instruct! unless options.delete(:skip_instruct)
-        options[:builder].errors do |e|
-          # The @errors instance variable is a Hash inside the Errors class
-          @errors.each_key do |attr|
-            @errors[attr].each do |msg|
-              next if msg.nil?
-              if attr == "base"
-                options[:builder].error("message" => msg)
-              else
-                fullmsg = @base.class.human_attribute_name(attr) + ' ' + msg
-                options[:builder].error("field" => attr, "message" => fullmsg)
-              end
+    def to_fxml(options={})
+      options[:root] ||= "errors"
+      options[:indent] ||= 2
+      options[:builder] ||= Builder::XmlMarkup.new(:indent => options[:indent])
+      options[:builder].instruct! unless options.delete(:skip_instruct)
+      options[:builder].errors do |e|
+        # The @errors instance variable is a Hash inside the Errors class
+        @errors.each_key do |attr|
+          @errors[attr].each do |msg|
+            next if msg.nil?
+            if attr == "base"
+              options[:builder].error("message" => msg)
+            else
+              fullmsg = @base.class.human_attribute_name(attr) + ' ' + msg
+              options[:builder].error("field" => attr, "message" => fullmsg)
             end
           end
         end
@@ -165,42 +165,4 @@ module ActiveRecord
     end  
   end
   
-  class Base
-    # Add a 'default_xml_methods' method to ActiveRecord::Base
-    # This is used to send a set of default :methods to #to_xml
-    # for this class.
-    # Like this:
-    #
-    # class SomeModel < ActiveRecord::Base
-    #   default_xml_methods :one, :is_true?
-    #
-    #   def one
-    #     1
-    #   end
-    #   
-    #   def is_true?
-    #     true
-    #   end
-    #
-    # end
-    #
-    # In the example above, .to_xml is now equivalent to writing .to_xml(:methods => [:one, :is_true?])
-    #
-    # $> script/console
-    # >> s = SomeModel.find(:first)
-    # >> puts s.to_xml
-    # <someModel>
-    #   ..... (regular old to_xml output goes here)
-    #   <one type="integer">one</always_true>
-    #   <is_true type="boolean">true</is_true>
-    # </someModel>
-    # >>
-    def self.default_xml_methods(*args)
-      @@default_xml_methods = args      
-    end
-    
-    def default_xml_methods
-      @@default_xml_methods if defined?(@@default_xml_methods)
-    end
-  end
 end

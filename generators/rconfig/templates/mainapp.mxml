@@ -9,6 +9,7 @@
 <% if use_air -%>
       import org.ruboss.services.air.AIRServiceProvider;
 <% end -%>
+			import org.ruboss.Ruboss;
       import <%= base_package %>.controllers.<%= command_controller_name %>;
 
       private function init():void {
