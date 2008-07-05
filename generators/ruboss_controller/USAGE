@@ -8,4 +8,4 @@ Description:
     at runtime. Doesn't require any arguments or options.
 
 Examples:
-    `./script/generate rcontroller`
+    `./script/generate ruboss_controller`
