@@ -97,7 +97,7 @@ class RubossConfigGenerator < Rails::Generator::Base
         m.file 'expressInstall.swf', 'public/expressInstall.swf'
         m.template 'index.html.erb', 'public/index.html'
         
-        m.dependency 'rcontroller', @args
+        m.dependency 'ruboss_controller', @args
       end
       m.template 'mainapp.mxml', File.join('app/flex', "#{project_name}.mxml")
       m.template 'mainair-app.xml', File.join('app/flex', "#{project_name}-app.xml") if @use_air

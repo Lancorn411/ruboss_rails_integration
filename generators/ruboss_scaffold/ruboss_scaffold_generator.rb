@@ -176,7 +176,7 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
 
       # Run the rcontroller generator to clobber the
       # RubossCommandController subclass to include the new models.
-      m.dependency 'rcontroller', [name] + @args, :collision => :force
+      m.dependency 'ruboss_controller', [name] + @args, :collision => :force
     end
   end
   
