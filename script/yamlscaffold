@@ -49,10 +49,10 @@ models.each do |model|
     line = extract_attrs(line, attrs)
   end
   line = model[0].camelcase + " " + line
-  puts 'running: rscaffold ' + line
-  Rails::Generator::Scripts::Generate.new.run(["rscaffold"] + line.split, :flex_only => ARGV.include?('flexonly'))
+  puts 'running: ruboss_scaffold ' + line
+  Rails::Generator::Scripts::Generate.new.run(["ruboss_scaffold"] + line.split, :flex_only => ARGV.include?('flexonly'))
   puts 'done ...'
   sleep 1
 end
 
-Rails::Generator::Scripts::Generate.new.run(["rconfig"], :app_only => true, :skip_framework => ARGV.include?('skipframework'))
+Rails::Generator::Scripts::Generate.new.run(["ruboss_config"], :app_only => true, :skip_framework => ARGV.include?('skipframework'))

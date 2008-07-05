@@ -162,7 +162,7 @@ namespace :ruboss do
           instance_name = File.basename(controller, '.rb').gsub(/_controller/, '').singularize
           if line =~ /^\s+format\.xml/
             if line =~ /head :ok/
-              fxml_line = line.gsub(/head :ok/, "render :xml => @#{instance_name}")
+              fxml_line = line.gsub(/head :ok/, "render :fxml => @#{instance_name}")
             else
               fxml_line = line.gsub(/format\.xml/, 'format.fxml')
               fxml_line.gsub!(/, :status[^\}]+/, ' ')

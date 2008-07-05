@@ -3,7 +3,7 @@ Description:
     views, along with a full test suite. The resource is ready to use as a
     starting point for your restful, resource-oriented application.
     
-    rscaffold delegates the underlying rails code generation to "scaffold"
+    ruboss_scaffold delegates the underlying rails code generation to "scaffold"
     and extends it in a number of ways:
       1. Generates all required Flex code.
       2. You can pass special belongs_to, has_one and has_many attributes
@@ -31,5 +31,5 @@ Description:
     declaration in config/routes.rb.
 
 Examples:
-    `./script/generate rscaffold project name:string notes:text has_many:tasks`
-    `./script/generate rscaffold task name:string notes:text belongs_to:project`
+    `./script/generate ruboss_scaffold project name:string has_many:tasks`
+    `./script/generate ruboss_scaffold task name:string belongs_to:project`

@@ -24,11 +24,9 @@ framework_distribution_url = "http://ruboss.com/releases/ruboss-#{FRAMEWORK_RELE
 framework_destination_file = "lib/ruboss-#{FRAMEWORK_RELEASE}.swc"
 
 puts "-----------------"
-%w(multiscaffold yamlscaffold).each do |script|
-  File.copy(File.dirname(__FILE__) + "/script/#{script}", RAILS_ROOT + '/script')
-  File.chmod(0755, ::RAILS_ROOT + "/script/#{script}")
-  puts "installing #{script} into script folder"
-end
+File.copy(File.dirname(__FILE__) + "/script/yamlscaffold", RAILS_ROOT + '/script')
+File.chmod(0755, ::RAILS_ROOT + "/script/yamlscaffold")
+puts "installed yamlscaffold into script folder"
 
 config_file = File.join(File.dirname(__FILE__), 'config', 'ruboss.yml')
 target_file = File.join(::RAILS_ROOT, 'config', 'ruboss.yml')

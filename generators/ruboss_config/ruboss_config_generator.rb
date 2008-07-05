@@ -13,7 +13,7 @@
 ################################################################################
 require 'open-uri'
 
-class RconfigGenerator < Rails::Generator::Base
+class RubossConfigGenerator < Rails::Generator::Base
   include Ruboss::Configuration
     
   attr_reader :project_name, 
