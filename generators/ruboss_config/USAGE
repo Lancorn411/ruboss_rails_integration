@@ -8,11 +8,11 @@ Description:
     (--air) option to the generator.
 
 Examples:
-    `./script/generate rconfig` # generates project structure and a 
+    `./script/generate ruboss_config` # generates project structure and a 
                                 # default Flex app configuration. Fetches 
                                 # latest ruboss framework SWC to "lib" 
                                 # folder
-    `./script/generate rconfig -a` # as above but generates an AIR app
-                                   # and configuration
-    `./script/generate rconfig -s` # generates Flex app but does not fetch
-                                   # the ruboss framework SWC.
+    `./script/generate ruboss_config -a` # as above but generates an AIR app
+                                # and configuration
+    `./script/generate ruboss_config -s` # generates Flex app but does not fetch
+                                # the ruboss framework SWC.

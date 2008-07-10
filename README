@@ -19,7 +19,7 @@ $>./script/plugin install git://github.com/dima/ruboss_rails_integration.git
 
 Next, we run the rconfig generator to create the new Flex project:
 
-$>./script/generate rconfig
+$>./script/generate ruboss_config
 
 If you are using a non-default Rails configuration with a root password defined for your local MySQL database, you'll also need to run this next step. Otherwise you can safely ignore the following rake task and proceed to the next step.
 
@@ -37,9 +37,9 @@ Using YAML to scaffold your Flex+Rails application
 --------------------------------------------------
 Scaffolding is a cool way to get started with a Rails (and now Flex) applications quickly. Unfortunately, things tend to become quite cumbersome once you get beyond 5 or so models. You have to individually run scaffolding for each model and then go and edit relationships in both rails and flex code. This approach just doesn't scale. You might tolerate doing all this manual work for a few models, but what are you going to do when you have to run pretty much the same command 30 or 40 times and then remember how all these things relate to each other? Wouldn't it be better if you could specify the bulk of your data model in some easy to read file and just run that once?
 
-This is basically the intuition behind two scripts that make their way into your Rails application script folder when you install the Ruboss plugin. These scripts are called yamlscaffold and multiscaffold respectively. They do pretty much the same thing (but accept differently formatted input) - and might end up being refactored into just one script later.
+This is basically the intuition behind yamlscaffold script.
 
-Now comes the cool stuff. Let's create a file called db/model.yml that contains the following:
+Let's create a file called db/model.yml that contains the following:
 project:
  - name: string
  - notes: text
@@ -111,9 +111,9 @@ And point your browser at http://localhost:3000. It's not going to be the greate
 Porting Pomodo to AIR
 ---------------------
 
-"rconfig" generator you've just seen above actually takes an optional argument, which is quite handy for converting our Flex project into an AIR project. Make sure you say "Y" when prompted to overwrite .actionScriptProperties, .project and Pomodo.mxml files:
+"ruboss_config" generator you've just seen above actually takes an optional argument, which is quite handy for converting our Flex project into an AIR project. Make sure you say "Y" when prompted to overwrite .actionScriptProperties, .project and Pomodo.mxml files:
 
-$>./script/generate rconfig -a
+$>./script/generate ruboss_config -a
 
 It is recommended that you shutdown your Flex Builder before running the generator above (if you are running it). This generator will change a few Flex Builder specific files (such as .actionScriptProperties and .project) to include AIR specific information. This is how Flex Builder itself knows that it's dealing with an AIR project as opposed to a Flex one. It's not a very good idea to be changing Flex Builder specific files while it's running.
 
@@ -182,9 +182,9 @@ If you simply call "PomodoController.initialize()" with no arguments then XML-ov
 
 As you might have guessed this will tell the app to stop using local AIR database and start talking to the remote Rails server again. Remember to start your Rails server using "script/server" before running this app.
 
-Finally, to convert our AIR application back into the Flex application it used to be run rconfig generator with no arguments again:
+Finally, to convert our AIR application back into the Flex application it used to be run ruboss_config generator with no arguments again:
 
-$>./script/generate rconfig
+$>./script/generate ruboss_config
 
 Again, remember to delete the Pomodo Run target and shutdown Flex Builder before you do that.
 
