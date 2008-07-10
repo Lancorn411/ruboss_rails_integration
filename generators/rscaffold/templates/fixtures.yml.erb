@@ -1,7 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 <% unless attributes.empty? -%>
-<%= class_name.downcase -%>_one:
+<%= class_name.underscore -%>_one:
 <% for attribute in attributes -%>
   <%= attribute.name %>: <%= attribute.default("#{class_name}1") %>
 <% end -%>
@@ -9,7 +9,7 @@
   <%= model %>: <%= model %>_one
 <% end -%>
 
-<%= class_name.downcase -%>_two:
+<%= class_name.underscore -%>_two:
 <% for attribute in attributes -%>
   <%= attribute.name %>: <%= attribute.default("#{class_name}2") %>
 <% end -%>
@@ -17,7 +17,7 @@
   <%= model %>: <%= model %>_two
 <% end -%>
 
-<%= class_name.downcase -%>_three:
+<%= class_name.underscore -%>_three:
 <% for attribute in attributes -%>
   <%= attribute.name %>: <%= attribute.default("#{class_name}3") %>
 <% end -%>
@@ -25,7 +25,7 @@
   <%= model %>: <%= model %>_three
 <% end -%>
 
-<%= class_name.downcase -%>_four:
+<%= class_name.underscore -%>_four:
 <% for attribute in attributes -%>
   <%= attribute.name %>: <%= attribute.default("#{class_name}4") %>
 <% end -%>
