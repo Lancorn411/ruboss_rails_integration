@@ -17,8 +17,14 @@ require File.dirname(__FILE__) + '/../config/environment'
 require 'yaml'
 require 'rails_generator'
 require 'rails_generator/scripts/generate'
+require 'fileutils'
 
 source = 'db/model.yml'
+
+if ARGV.include?('clean')
+  FileUtils.rm_f Dir.glob('app/helpers/*')
+  FileUtils.rm_f Dir.glob('db/migrate/*')
+end
 
 def extract_attrs(line, attrs)
   attrs.each do |key,value|
