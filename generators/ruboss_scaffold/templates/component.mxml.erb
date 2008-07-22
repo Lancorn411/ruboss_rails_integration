@@ -64,7 +64,7 @@
   }
   
   private function on<%= class_name %>Select():void {
-    edited<%= class_name %> = RubossUtils.clone(<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem) as <%= class_name %>;
+    edited<%= class_name %> = RubossUtils.clone(<%= class_name.downcase_first_letter.pluralize %>List.selectedItem) as <%= class_name %>;
   }
   
   private function on<%= class_name %>Create(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
@@ -72,7 +72,7 @@
   }
   
   private function on<%= class_name %>Update(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
-    <%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem = <%= class_name.downcase_first_letter %>;
+    <%= class_name.downcase_first_letter.pluralize %>List.selectedItem = <%= class_name.downcase_first_letter %>;
     edited<%= class_name %> = RubossUtils.clone(<%= class_name.downcase_first_letter %>) as <%= class_name %>;
   }
   
@@ -126,10 +126,10 @@
       <mx:Button label="Create <%= class_name %>" width="34%" height="30"
         click="create<%= class_name %>()"/>
       <mx:Button label="Update <%= class_name %>" width="33%" height="30"
-        enabled="{<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem != null}"
+        enabled="{<%= class_name.downcase_first_letter.pluralize %>List.selectedItem != null}"
         click="update<%= class_name %>()"/>
       <mx:Button label="Delete <%= class_name %>" width="33%" height="30"
-        enabled="{<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem != null}"
+        enabled="{<%= class_name.downcase_first_letter.pluralize %>List.selectedItem != null}"
         click="destroy<%= class_name %>()"/>
     </mx:ControlBar>
   </mx:Panel>
