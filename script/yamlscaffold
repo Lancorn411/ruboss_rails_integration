@@ -21,11 +21,6 @@ require 'fileutils'
 
 source = 'db/model.yml'
 
-if ARGV.include?('clean')
-  FileUtils.rm_f Dir.glob('app/helpers/*')
-  FileUtils.rm_f Dir.glob('db/migrate/*')
-end
-
 def extract_attrs(line, attrs)
   attrs.each do |key,value|
     if key =~ /\*$/
