@@ -126,7 +126,7 @@
 <% end -%>
 <% for model in belongs_tos -%>
       <mx:FormItem label="<%= model.camelcase %>" width="100%">
-        <mx:ComboBox id="<%= model.camelcase(:lower) %>ComboBox" width="150"
+        <mx:ComboBox id="<%= model.camelcase(:lower) %>ComboBox" width="200"
           labelField="{<%= model.camelcase %>.LABEL}"
           dataProvider="{Ruboss.models.index(<%= model.camelcase %>)}" prompt="<%= model.camelcase %> ..."
           selectedItem="{_<%= class_name.downcase_first_letter %>.<%= model.camelcase(:lower) %>}" />
