@@ -18,9 +18,9 @@
 
   private function save<%= class_name %>():void {
     if (!isNaN(_<%= class_name.downcase_first_letter %>.id) && _<%= class_name.downcase_first_letter %>.id != 0) {
-      create<%= class_name %>({afterCallback: on<%= class_name %>Create});
+      create<%= class_name %>();
     } else {
-      update<%= class_name %>({afterCallback: on<%= class_name %>Update});
+      update<%= class_name %>();
     }
   }
   
