@@ -137,7 +137,7 @@
       <mx:Button label="Save <%= class_name %>" width="50%" height="30"
         click="save<%= class_name %>()"/>
       <mx:Button label="Delete <%= class_name %>" width="50%" height="30"
-        enabled="{<%= class_name.downcase_first_letter.pluralize %>List.selectedItem != null}"
+        enabled="{_<%= class_name.downcase_first_letter %> != null}"
         click="destroy<%= class_name %>()"/>
     </mx:ControlBar>
   </mx:Panel>
