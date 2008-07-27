@@ -92,6 +92,10 @@
   private function on<%= class_name %>Destroy(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
     on<%= class_name %>Create(<%= class_name.downcase_first_letter %>);
   }
+
+  private function canDelete<%= class_name %>(<%= class_name.downcase_first_letter %>:<%= class_name %>):Boolean {
+    return <%= class_name.downcase_first_letter %> != null && <%= class_name.downcase_first_letter %>.id != 0;
+  }
 ]]></mx:Script>
   <mx:Panel id="<%= class_name.downcase_first_letter.pluralize %>Panel"
     title="<%= class_name.pluralize %>"
@@ -137,7 +141,7 @@
       <mx:Button label="Save <%= class_name %>" width="50%" height="30"
         click="save<%= class_name %>()"/>
       <mx:Button label="Delete <%= class_name %>" width="50%" height="30"
-        enabled="{_<%= class_name.downcase_first_letter %> != null}"
+        enabled="{canDelete<%= class_name %>(_<%= class_name.downcase_first_letter %>)}"
         click="destroy<%= class_name %>()"/>
     </mx:ControlBar>
   </mx:Panel>
