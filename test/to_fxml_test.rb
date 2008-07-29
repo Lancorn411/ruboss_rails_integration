@@ -30,4 +30,13 @@ class ToFxmlTest < Test::Unit::TestCase
     assert_xml_select 'user locations location tasks name', 'Get piano lessons from Haydn'
   end
   
+  def test_default_fxml_methods_on_user_are_included_in_fxml
+    set_response_to users(:ludwig).to_fxml
+    assert_xml_select 'user full_name', 'Ludwig van Beethoven'
+  end
+  
+  def test_model_without_default_fxml_methods_still_works
+    assert_nothing_raised{ tasks(:learn_piano).to_fxml }
+  end
+  
 end

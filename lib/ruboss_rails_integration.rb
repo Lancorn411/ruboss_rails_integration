@@ -112,12 +112,19 @@ module ActiveRecord
         end
         result
       end
+      
+      def default_fxml_methods(*args)
+        define_method('default_fxml_methods') do
+          return *args
+        end
+      end
     end
   end
   
   module Serialization
     def to_fxml(options = {})
       options.merge!(:dasherize => false)
+      options[:methods] = (options[:methods] || [] ) + default_fxml_methods if respond_to?(:default_fxml_methods)
       default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]
       options[:except] = (options[:except] ? options[:except] + default_except : default_except)
       to_xml(options)
