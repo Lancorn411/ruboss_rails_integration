@@ -3,3 +3,6 @@
 learn_piano:
   name: Get piano lessons from Haydn
   location: vienna
+  user: ludwig
+  start_time: <%= 30.days.ago %>
+  end_time: <%= 100.days.from_now %>
