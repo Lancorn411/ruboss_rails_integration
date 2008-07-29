@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :projects
   has_many :locations
   
-  default_fxml_methods :full_name, :has_nothing_to_do
+  default_xml_methods :full_name, :has_nothing_to_do
   
   def full_name
     "#{first_name} #{last_name}"

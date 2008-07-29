@@ -113,10 +113,10 @@ module ActiveRecord
         result
       end
       
-      def default_fxml_methods(*args)
+      def default_xml_methods(*args)
         methods = *args.dup
         module_eval <<-END 
-            def self.default_fxml_methods_a
+            def self.default_xml_methods_a
               return [#{methods.inspect}].flatten
             end
           END
@@ -125,9 +125,16 @@ module ActiveRecord
   end
   
   module Serialization
+    alias_method :old_to_xml, :to_xml unless method_defined?(:old_to_xml)
+    
+    def to_xml(options = {})
+      options[:methods] = (options[:methods] || [] ) + self.class.default_xml_methods_a if self.class.respond_to?(:default_xml_methods_a)
+      old_to_xml(options)
+    end
+    
+    
     def to_fxml(options = {})
-      options.merge!(:dasherize => false)
-      options[:methods] = (options[:methods] || [] ) + self.class.default_fxml_methods_a if self.class.respond_to?(:default_fxml_methods_a)
+      options.merge!(:dasherize => false)      
       default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]
       options[:except] = (options[:except] ? options[:except] + default_except : default_except)
       to_xml(options)
