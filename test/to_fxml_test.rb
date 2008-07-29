@@ -74,4 +74,6 @@ class ToFxmlTest < Test::Unit::TestCase
   
   # Test empty arrays
   
+  # Test options[:except]
+  
 end
