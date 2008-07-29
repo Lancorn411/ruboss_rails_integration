@@ -2,6 +2,7 @@ require 'test/unit'
 require 'rubygems'
 require 'active_support'
 require 'action_controller'
+
 require File.join(File.dirname(__FILE__), '..', 'lib', 'ruboss_helper')
 
 class RubossHelperTest < Test::Unit::TestCase
@@ -9,6 +10,7 @@ class RubossHelperTest < Test::Unit::TestCase
   ActionView::Helpers::AssetTagHelper::ASSETS_DIR = File.dirname(__FILE__) # Make rails_asset_id work
   
   include RubossHelper
+  include ActionView::Helpers
   include ActionView::Helpers::UrlHelper
   include ActionView::Helpers::ActiveRecordHelper
   include ActionView::Helpers::JavascriptHelper
@@ -17,6 +19,11 @@ class RubossHelperTest < Test::Unit::TestCase
   include ActionView::Helpers::CaptureHelper
   include ActionView::Helpers::TextHelper
   include ActionController
+  
+  # Mock out the form authenticity token method
+  def form_authenticity_token
+    "123456"
+  end
   
   def test_sanity
     assert_nothing_raised {swfobject('test.swf')}
