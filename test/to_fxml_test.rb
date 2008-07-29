@@ -20,16 +20,6 @@ class ToFxmlTest < Test::Unit::TestCase
     assert_xml_select 'user first_name', 'Ludwig'    
   end
   
-  def test_to_fxml_with_single_include
-    set_response_to users(:ludwig).to_fxml(:include => [:locations])
-    assert_xml_select 'user locations location name', 'Vienna'
-  end
-  
-  def test_to_fxml_with_double_nested_include
-    set_response_to users(:ludwig).to_fxml(:include => {:locations => {:include => :tasks}})
-    assert_xml_select 'user locations location tasks name', 'Get piano lessons from Haydn'
-  end
-  
   def test_default_xml_methods_on_user_are_included_in_fxml
     set_response_to users(:ludwig).to_fxml
     assert_xml_select 'user full_name', 'Ludwig van Beethoven'
@@ -50,19 +40,18 @@ class ToFxmlTest < Test::Unit::TestCase
   end
   
   def test_default_xml_methods_exists
-    assert User.respond_to?(:default_xml_methods_a)
-    assert_equal [:full_name, :has_nothing_to_do], User.default_xml_methods_a
+    assert User.respond_to?(:default_xml_methods_array)
+    assert_equal [:full_name, :has_nothing_to_do], User.default_xml_methods_array
   end
   
   def test_default_xml_methods_on_dependencies
     t = users(:ludwig).tasks.first
-    assert t.class.respond_to?(:default_xml_methods_a)
-    assert_equal [:is_active], t.class.default_xml_methods_a
+    assert t.class.respond_to?(:default_xml_methods_array)
+    assert_equal [:is_active], t.class.default_xml_methods_array
   end
   
   def test_default_xml_methods_are_included_in_includes
     set_response_to users(:ludwig).to_fxml(:include => :tasks)
-    puts @response.body
     assert_xml_select 'tasks task is_active'
   end
   
@@ -70,6 +59,19 @@ class ToFxmlTest < Test::Unit::TestCase
     assert_nothing_raised{ locations(:vienna).to_fxml }
   end
   
+  def test_user_with_non_default_methods_in_to_xml
+    set_response_to users(:ludwig).to_fxml(:methods => :email_host)
+    assert_xml_select 'user email_host', 'vienna.de'
+    assert_xml_select 'user full_name'
+  end
+  
+  def test_model_with_default_xml_includes
+    set_response_to users(:ludwig).to_fxml
+    assert_xml_select 'user tasks task'
+  end
+  
   # Test type=.... stuff for has_many, booleans, integers, dates, date-times
+  
+  # Test empty arrays
   
 end

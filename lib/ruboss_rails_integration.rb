@@ -116,10 +116,19 @@ module ActiveRecord
       def default_xml_methods(*args)
         methods = *args.dup
         module_eval <<-END 
-            def self.default_xml_methods_a
+            def self.default_xml_methods_array
               return [#{methods.inspect}].flatten
             end
           END
+      end
+      
+      def default_xml_includes(*args)
+        includes = *args.dup
+        module_eval <<-END
+          def self.default_xml_include_param
+            return [#{includes.inspect}].flatten
+          end
+        END
       end
     end
   end
@@ -128,7 +137,8 @@ module ActiveRecord
     alias_method :old_to_xml, :to_xml unless method_defined?(:old_to_xml)
     
     def to_xml(options = {})
-      options[:methods] = (options[:methods] || [] ) + self.class.default_xml_methods_a if self.class.respond_to?(:default_xml_methods_a)
+      options[:methods] = [options[:methods] || []].flatten + self.class.default_xml_methods_array if self.class.respond_to?(:default_xml_methods_array)      
+      options[:include] = [options[:include] || []].flatten + self.class.default_xml_include_param if self.class.respond_to?(:default_xml_include_param)
       old_to_xml(options)
     end
     
