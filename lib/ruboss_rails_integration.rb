@@ -26,7 +26,7 @@ module Ruboss
   
   module Configuration
     def extract_names
-      project_name = Ruboss.root.split("/").last.capitalize
+      project_name = Ruboss.root.split("/").last.camelcase
       project_name_downcase = project_name.downcase
 
       begin      
