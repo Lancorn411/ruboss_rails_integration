@@ -1,1 +1,1 @@
-FRAMEWORK_RELEASE = 'latest'
+FRAMEWORK_RELEASE = 'latest-dima'
