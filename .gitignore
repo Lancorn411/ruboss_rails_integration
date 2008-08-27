@@ -1,3 +1,5 @@
 .project
 .gitignore~
 test/test.sqlite3
+test/helpers/controllers.log
+test/helpers/models.log
