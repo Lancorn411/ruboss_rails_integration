@@ -83,12 +83,12 @@ end
 
 module ActionController
   class Base
-    alias_method :old_render, :render
+    alias_method :old_render, :render unless method_defined?(:old_render)
    
     # so that we can have handling for :fxml option and write code like
     # format.fxml  { render :fxml => @projects }
     def render(options = nil, extra_options = {}, &block)
-      if options and options[:fxml]
+      if options && options[:fxml]
         xml = options[:fxml]
         response.content_type ||= Mime::XML
         render_for_text(xml.respond_to?(:to_fxml) ? xml.to_fxml : xml, options[:status])
@@ -142,7 +142,8 @@ module ActiveRecord
       old_to_xml(options)
     end
     
-    
+    # Change this.  Don't open up to_xml.  Instead, generate the include hash by starting with the current includes and adding any 
+    # default_fxml_includes found on the included models.
     def to_fxml(options = {})
       options.merge!(:dasherize => false)      
       default_except = [:crypted_password, :salt, :remember_token, :remember_token_expires_at]

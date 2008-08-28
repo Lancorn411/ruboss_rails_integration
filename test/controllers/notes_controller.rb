@@ -3,9 +3,8 @@ class NotesController < ApplicationController
   # GET /notes.xml
   def index
     @notes = Note.find(:all)
-
     respond_to do |format|
-      format.html # index.html.erb
+      format.html
       format.xml  { render :xml => @notes }
       format.fxml  { render :fxml => @notes }
     end
@@ -89,5 +88,9 @@ class NotesController < ApplicationController
       format.xml  { head :ok }
       format.fxml  { render :fxml => @note }
     end
+  end
+  
+  def empty_params_action
+    params = {}
   end
 end

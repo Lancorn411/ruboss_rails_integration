@@ -12,6 +12,14 @@ require 'action_controller'
 require 'action_controller/test_case'
 require 'action_controller/test_process'
 require 'action_controller/integration'
+require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'ruboss_rails_integration')
+require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'ruboss_helper')
+require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'ruboss_controller')
+require File.join(File.dirname(__FILE__), '..', '..', 'lib', 'ruboss_test_helpers')
+require File.join(File.dirname(__FILE__), '..', 'controllers', 'application')
+require File.join(File.dirname(__FILE__), '..', 'controllers', 'notes_controller')
+
+
 require 'init'
 
 config = YAML::load(IO.read(File.join(File.dirname(__FILE__), '..', 'database.yml')))[ENV['DB'] || 'test']
@@ -20,6 +28,7 @@ ActiveRecord::Base.establish_connection(config)
 
 ActiveRecord::Base.logger = Logger.new(File.dirname(__FILE__) + "/models.log")
 ActionController::Base.logger = Logger.new(File.dirname(__FILE__) + "/controllers.log")
+ApplicationController.append_view_path File.join(File.dirname(__FILE__), '..', 'views')
 
 load(schema_file) if File.exist?(schema_file)
 
