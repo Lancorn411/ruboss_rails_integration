@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:generated="<%= base_package %>.components.generated.*"
+    minWidth="1000"
+    minHeight="680"
+    paddingLeft="5"
+    paddingRight="5"
+    paddingTop="5"
+    paddingBottom="5"
+    width="100%"
+    height="100%"
+    creationComplete="onComplete()">
+<mx:Script>
+<![CDATA[
+    import <%= base_package %>.controllers.<%= project_name %>Events;
+	import <%= base_package %>.models.<%= project_name %>ModelLocator;
+    import com.pomodo.utils.CairngormUtils;
+
+    [Embed(source="assets/images/cairngorm.gif")]
+	[Bindable]
+	public var cairngormImage:Class;
+
+    [Bindable]
+    private var appModel:<%= project_name %>ModelLocator = <%= project_name %>ModelLocator.getInstance();
+
+    private function sendData(eventType:String):void {
+        CairngormUtils.dispatchEvent(eventType,
+            "/logout");
+    }
+    
+    private function onComplete():void {<% for model in model_names %><% unless model == "#{project_name}ModelLocator" %>
+		CairngormUtils.dispatchEvent(<%= project_name %>Events.LIST_<%= model.pluralize.upcase %>);<% end -%><% end -%>
+	
+	}
+]]>
+</mx:Script>
+   <mx:TabNavigator width="100%" height="100%">
+<% for component in component_names -%>
+    <generated:<%= component %>/>
+<% end -%>
+	  <mx:Panel label="Cairngorm" height="100%" width="100%" 
+		 paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="10">
+		<mx:VBox  width="100%" height="100%">
+		  <mx:Image horizontalAlign="center" width="100%" height="100%" source="{cairngormImage}"/>
+		</mx:VBox>
+	  </mx:Panel>
+   </mx:TabNavigator>
+   <mx:Button label="logout" width="100%" click="sendData(<%= project_name %>Events.DESTROY_SESSION)"/>
+</mx:VBox>

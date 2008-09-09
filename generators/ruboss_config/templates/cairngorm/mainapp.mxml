@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:<%= application_tag %> xmlns:mx="http://www.adobe.com/2006/mxml"
+  xmlns:usr="<%= base_package %>.components.generated.users.*"
+  xmlns:control="<%= base_package %>.controllers.*"
+  layout="vertical"
+  backgroundGradientColors="[#ffffff, #c0c0c0]"
+  horizontalAlign="center"
+  verticalAlign="top"
+  paddingLeft="0"
+  paddingRight="0"
+  paddingTop="0"
+  paddingBottom="0"
+  width="100%"
+  height="100%"
+  frameRate="60"
+  creationCompleteEffect="fadeIn"
+  initialize="init()">
+  <mx:Script>
+    <![CDATA[
+<% if use_air -%>
+      import org.ruboss.services.air.AIRServiceProvider;
+<% end -%>
+	  import org.ruboss.Ruboss;
+      import <%= base_package %>.controllers.<%= command_controller_name %>;
+      import <%= base_package %>.controllers.<%= project_name %>Events;
+	  import <%= base_package %>.models.<%= project_name %>ModelLocator;
+	
+	  import mx.core.Container;
+
+	  [Bindable]
+      private var appModel:<%= project_name %>ModelLocator = <%= project_name %>ModelLocator.getInstance();
+
+      private function init():void {
+<% if use_air -%>
+        <%= command_controller_name %>.initialize([AIRServiceProvider], AIRServiceProvider.ID, "<%= base_package %>");
+<% else -%>
+        <%= command_controller_name %>.initialize();
+<% end -%>
+      }
+
+	  private function setViewState(workflowState:String):Container {
+	  	if (workflowState ==
+				<%= project_name %>ModelLocator.VIEWING_ACCOUNT_SCREEN) {
+	    		return accountBox;
+	    } else if (workflowState ==
+	            <%= project_name %>ModelLocator.VIEWING_MAIN_APP) {
+	            return mainBox;
+	    } else {
+	            return accountBox;//error
+	    }
+	  }
+	
+    ]]>
+  </mx:Script>
+	<mx:Fade id="fadeIn" duration="500"/>
+
+  	<!--
+  	The AppController contains all the Commands specific to this application!
+	This is one of the most important things in the Cairngorm framework!
+	If you do not include your AppController on in the main file (<%= project_name %>.mxml),
+	then you will not be able to listen for any dispatched Cairngorm Events!
+	Good luck :)
+  	-->
+  	<control:AppController id="controller" />
+	
+	<mx:VDividedBox width="100%" height="100%">
+       <mx:ViewStack id="mainStack" width="100%" height="100%"
+		selectedChild="{setViewState(appModel.workflowState)}">
+          <usr:AccountBox id="accountBox"/>
+          <usr:MainBox id="mainBox" showEffect="fadeIn"/>
+        </mx:ViewStack>
+    </mx:VDividedBox>
+</mx:<%= application_tag %>>
+

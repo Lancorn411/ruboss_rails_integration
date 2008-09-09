@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml"
+    xmlns:usr="<%= base_package %>.components.generated.users.*"
+    horizontalAlign="center" verticalAlign="top"
+    width="100%" height="100%">
+    <mx:VBox width="500" horizontalAlign="center">
+        <mx:Label
+           text="Welcome to Our World!"/>
+        <mx:Spacer height="10"/>
+        <mx:Accordion width="440" height="330">
+            <usr:LoginBox/>
+            <usr:SignupBox/>
+        </mx:Accordion>       
+    </mx:VBox>
+</mx:VBox>

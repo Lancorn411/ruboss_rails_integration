@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" label="New Account"
+  xmlns:rcomponents="org.ruboss.components.*"
+  xmlns:cpv="com.pomodo.validators.*">
+<mx:Script><![CDATA[
+  import org.ruboss.Ruboss;
+
+  import mx.controls.Alert;
+  import mx.events.ValidationResultEvent;
+  import mx.validators.Validator;
+
+  import <%= base_package %>.models.<%= class_name %>;
+  import <%= base_package %>.controllers.<%= project_name %>Events;
+  import com.pomodo.utils.CairngormUtils;
+
+  import com.pomodo.validators.ServerErrors;
+
+  [Bindable]  // This is usually the User Account model
+  private var _<%= class_name.downcase_first_letter %>:<%= class_name %> = new <%= class_name %>();
+
+  public var accountCreateErrors:ServerErrors;
+  
+  private function sendData(eventType:String):void {
+	_<%= class_name.downcase_first_letter %>.login = loginTI.text;
+	_<%= class_name.downcase_first_letter %>.email = emailTI.text;
+	_<%= class_name.downcase_first_letter %>.firstName = firstNameTI.text;
+	_<%= class_name.downcase_first_letter %>.lastName = lastNameTI.text;
+	_<%= class_name.downcase_first_letter %>.password = passwordTI.text;
+
+	CairngormUtils.dispatchEvent(eventType, _<%= class_name.downcase %>);
+  }
+
+]]></mx:Script>
+<mx:EmailValidator id="emailValidator" source="{emailTI}"
+    property="text"/>
+<mx:StringValidator
+    id="usernameValidator"
+    source="{loginTI}"
+    property="text"
+    required="true"
+    maxLength="80"/>
+<mx:StringValidator
+    id="passwordValidator"
+    source="{passwordTI}"
+    property="text"
+    required="true"
+    minLength="4"
+    maxLength="40"/>
+<cpv:PasswordConfirmationValidator
+    id="passwordConfirmationValidator"
+    password="{passwordTI.text}"
+    source="{confirmPasswordTI}"
+    property="text"
+    required="true"/>
+<cpv:ServerErrorValidator
+    id="loginSV"
+    field="login"
+    listener="{loginTI}"
+    serverErrors="{accountCreateErrors}"/>
+<cpv:ServerErrorValidator
+    id="emailSV"
+    field="email"
+    listener="{emailTI}"
+    serverErrors="{accountCreateErrors}"/>
+<cpv:ServerErrorValidator
+    id="passwordSV"
+    field="password"
+    listener="{passwordTI}"
+    serverErrors="{accountCreateErrors}"/>
+<cpv:ServerErrorValidator
+    id="passwordConfirmationSV"
+    field="password_confirmation"
+    listener="{confirmPasswordTI}"
+    serverErrors="{accountCreateErrors}"/>
+<mx:Form labelWidth="150">
+    <mx:FormItem required="true" label="Username">
+        <mx:TextInput id="loginTI"/>
+    </mx:FormItem>
+    <mx:FormItem required="true" label="Email Address">
+        <mx:TextInput id="emailTI"/>
+    </mx:FormItem>
+    <mx:FormItem label="First Name">
+        <mx:TextInput id="firstNameTI"/>
+    </mx:FormItem>
+    <mx:FormItem label="Last Name">
+        <mx:TextInput id="lastNameTI"/>
+    </mx:FormItem>
+    <mx:FormItem required="true" label="Password">
+        <mx:TextInput id="passwordTI"
+            displayAsPassword="true"/>
+    </mx:FormItem>
+    <mx:FormItem required="true" label="Confirm Password">
+        <mx:TextInput id="confirmPasswordTI"
+            displayAsPassword="true"/>
+    </mx:FormItem>
+    <mx:FormItem>
+        <mx:LinkButton label="Terms of Service"
+            click="sendData(<%= project_name %>Events.LIST_<%= class_name.pluralize.upcase %>)"/>
+    </mx:FormItem>
+    <mx:FormItem>
+        <mx:CheckBox id="tosCB"
+            label="I agree to the terms of service"/>
+    </mx:FormItem>
+    <mx:FormItem>
+        <mx:Button id="createAccountButton"
+            label="Create Account"
+            toolTip="{tosCB.selected ? '' : 'You must accept the terms of service.'}"
+            enabled="{tosCB.selected}"
+            click="sendData(<%= project_name %>Events.CREATE_<%= class_name.upcase %>)"/>
+    </mx:FormItem>
+</mx:Form>
+</mx:VBox>

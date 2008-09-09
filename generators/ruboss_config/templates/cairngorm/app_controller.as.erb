@@ -1,0 +1,27 @@
+package <%= base_package %>.controllers {
+	
+	import com.adobe.cairngorm.control.FrontController;
+	
+	import <%= base_package %>.controllers.<%= project_name %>Events;
+	import <%= base_package %>.commands.*;
+
+	public class AppController extends FrontController {
+	
+    	public function AppController() {
+			initializeCommands();
+		}
+	
+		public function initializeCommands():void {
+			
+			addCommand(<%= project_name %>Events.CREATE_SESSION, SessionsCommand);
+			addCommand(<%= project_name %>Events.DESTROY_SESSION, SessionsCommand);	
+<% for model in model_names %><% unless model == "#{project_name}ModelLocator" %>
+			// Commands for the <%= model %> model...
+			addCommand(<%= project_name %>Events.LIST_<%= model.pluralize.upcase %>, <%= model %>Command);
+			addCommand(<%= project_name %>Events.CREATE_<%= model.upcase %>, <%= model %>Command);
+			addCommand(<%= project_name %>Events.UPDATE_<%= model.upcase %>, <%= model %>Command);
+			addCommand(<%= project_name %>Events.DESTROY_<%= model.upcase %>, <%= model %>Command);
+<% end -%><% end -%>
+		}
+	}
+}

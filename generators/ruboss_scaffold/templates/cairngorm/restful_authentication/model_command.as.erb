@@ -1,0 +1,98 @@
+package <%= base_package %>.commands {
+
+	import com.adobe.cairngorm.commands.Command;
+    import com.adobe.cairngorm.control.CairngormEvent;
+	
+	import mx.rpc.IResponder;
+	
+	import org.ruboss.Ruboss;
+	import org.ruboss.utils.RubossUtils;
+	
+	import <%= base_package %>.models.<%= class_name %>;
+	import <%= base_package %>.models.<%= project_name %>ModelLocator;
+	import <%= base_package %>.controllers.<%= project_name %>Events;
+
+	public class <%= class_name %>Command implements Command {
+		
+		public var edited<%= class_name %>:<%= class_name %>;
+		private var appModel:<%= project_name %>ModelLocator = <%= project_name %>ModelLocator.getInstance();
+	
+    	/**
+     	 * Command Constructor.
+     	 * Creates the "<%= class_name %>" Model from the Cairngorm Event data.
+	 	 * This allows common RESTful functions (show, create, update, delete)
+	 	 * to be reused by multiple views, thereby following the DRY principle.
+     	 */
+    	public function <%= class_name %>Command() {
+			super();
+		}
+	
+		public function execute(event:CairngormEvent):void {
+			edited<%= class_name %> = event.data as <%= class_name %>;
+
+			switch(event.type)
+        	{
+            	case <%= project_name %>Events.LIST_<%= class_name.pluralize.upcase %>:
+                	list<%= class_name.pluralize %>();  
+                	break;
+				case <%= project_name %>Events.CREATE_<%= class_name.upcase %>:
+					create<%= class_name %>();
+					break;
+				case <%= project_name %>Events.UPDATE_<%= class_name.upcase %>:
+					update<%= class_name %>();
+					break;
+				case <%= project_name %>Events.DESTROY_<%= class_name.upcase %>:
+					destroy<%= class_name %>();
+					break;
+        	}
+		}
+	
+    	/**
+     	 * GET /<%= class_name.downcase_first_letter.pluralize %>
+	 	 * GET /<%= class_name.downcase_first_letter.pluralize %>.xml
+     	 */
+    	public function list<%= class_name.pluralize %>():void {
+			Ruboss.models.index(<%= class_name %>);
+		}
+
+    	/**
+     	 * POST /<%= class_name.downcase_first_letter %>
+	 	 * POST /<%= class_name.downcase_first_letter %>.xml
+     	 */
+		public function create<%= class_name %>():void {
+			edited<%= class_name %>.create({afterCallback: on<%= class_name %>Create});
+		}
+	
+    	/**
+     	 * PUT /<%= class_name.downcase_first_letter %>/1
+	 	 * PUT /<%= class_name.downcase_first_letter %>/1.xml
+     	 */
+		public function update<%= class_name %>():void {
+			edited<%= class_name %>.update({afterCallback: on<%= class_name %>Update});
+		}
+	
+    	/**
+     	 * DELETE /<%= class_name.downcase_first_letter %>/1
+	 	 * DELETE /<%= class_name.downcase_first_letter %>/1.xml
+     	 */
+		public function destroy<%= class_name %>():void {
+			edited<%= class_name %>.destroy({afterCallback: on<%= class_name %>Destroy});
+		}
+		
+		// PRIVATE CLASSES
+	
+		private function on<%= class_name %>Create(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
+			edited<%= class_name %> = new <%= class_name %>;
+			appModel.workflowState = <%= project_name %>ModelLocator.VIEWING_MAIN_APP;
+			appModel.<%= class_name.downcase_first_letter %> = edited<%= class_name %>;
+		}
+
+		private function on<%= class_name %>Update(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
+			edited<%= class_name %> = RubossUtils.clone(<%= class_name.downcase_first_letter %>) as <%= class_name %>;
+		}
+
+		private function on<%= class_name %>Destroy(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
+			on<%= class_name %>Create(<%= class_name.downcase_first_letter %>);
+		}
+	}
+}
