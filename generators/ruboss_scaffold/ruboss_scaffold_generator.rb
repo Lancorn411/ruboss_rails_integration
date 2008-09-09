@@ -14,7 +14,7 @@
 module Rails
   module Generator
     class GeneratedAttribute
-      attr_accessor :name, :type, :column, :flex_name
+      attr_accessor :name, :type, :column, :flex_name, :model_type # added model_type back for DataGrid Component...
 
       def initialize(name, type)
         @name, @type = name, type.to_sym
@@ -86,7 +86,9 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
 
   attr_reader   :belongs_tos, 
                 :has_manies,
-                :has_ones
+                :has_ones,
+                # added for restful_authentication integration
+                :with_user
     
   attr_reader   :controller_name,
                 :controller_class_path,
@@ -272,9 +274,6 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
           # RubossCommandController subclass to include the new models.
           m.dependency 'rcontroller', [name] + @args, :collision => :force
 
-          # Use Rails' scaffold if you don't choose the --authenticated option, which has its own scaffold
-          m.dependency 'scaffold', [name] + @args, :collision => :skip unless options[:flex_only]
-
         # Restful_Authentication configuration...
         else if options[:authenticated]
           # Check for class naming collisions.
@@ -398,8 +397,8 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
               :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}" },
               :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
           end
-        
-        # If no plugins are specified, this is what you will get...
+          
+        # If no plugins are specified, but you still want Cairngorm, this is what you will get...
         else
           # Generate Flex AS model and MXML component based on the
           # Ruboss templates.
@@ -434,7 +433,8 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
             }, :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}" unless options[:flex_only]
           end
         end
-        
+      end
+
       # If you want the original setup (without Cairngorm, PureMVC, Mate, etc.)...
       else
         m.dependency 'scaffold', [name] + @args, :skip_migration => true, :collision => :skip unless options[:flex_only]
@@ -484,12 +484,10 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
       opt.separator 'Options:'
       opt.on("-f", "--flex-only", "Scaffold Flex code only", 
         "Default: false") { |v| options[:flex_only] = v}
-      opt.on("-c", "--cairngorm", "Wire up your Flexible Rails application using the Cairngorm Framework.", 
+      opt.on("--cairngorm", "Wire up your Flexible Rails application using the Cairngorm Framework.", 
         "Default: false") { |v| options[:cairngorm] = v }
       opt.on("--attachment", 
         "Generate signup 'activation code' confirmation via email") { |v| options[:attachment_fu] = true }
-      opt.on("--with-gallery", "Adds an image gallery to view your files", 
-        "Default: false") { |v| options[:gallery] = v}
       opt.on("--authenticated", 
         "Generate authenticated user and sessions") { |v| options[:authenticated] = true }
       opt.on("--skip-migration", 
