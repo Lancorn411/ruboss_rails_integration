@@ -132,15 +132,18 @@ class RubossConfigGenerator < Rails::Generator::Base
           end
         end
         
+        # The new RubossCommandsClass causes everything to not work...
         # Ruboss Framework
-        framework_distribution_url = "http://ruboss.com/releases/ruboss-#{FRAMEWORK_RELEASE}.swc"
-        framework_destination_file = "lib/ruboss-#{FRAMEWORK_RELEASE}.swc"
+        # framework_distribution_url = "http://ruboss.com/releases/ruboss-#{FRAMEWORK_RELEASE}.swc"
+        # framework_destination_file = "lib/ruboss-#{FRAMEWORK_RELEASE}.swc"
         
-        if !options[:skip_framework] && !File.exist?(framework_destination_file)
-          puts "fetching #{FRAMEWORK_RELEASE} framework binary from: #{framework_distribution_url} ..."
-          open(framework_destination_file, "wb").write(open(framework_distribution_url).read)
-          puts "done. saved to #{framework_destination_file}"
-        end
+        # if !options[:skip_framework] && !File.exist?(framework_destination_file)
+        #   puts "fetching #{FRAMEWORK_RELEASE} framework binary from: #{framework_distribution_url} ..."
+        #   open(framework_destination_file, "wb").write(open(framework_distribution_url).read)
+        #   puts "done. saved to #{framework_destination_file}"
+        # end
+        
+        m.file 'ruboss.swc', 'lib/ruboss.swc'
   
         m.file 'swfobject.js', 'public/javascripts/swfobject.js'
         m.file 'expressInstall.swf', 'public/expressInstall.swf'
