@@ -423,7 +423,7 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
             :collision => :force unless options[:flex_only]
 
           unless options[:skip_fixture] 
-            m.template 'cairngorm/ruboss_scaffold/fixtures.yml.erb',  File.join("test", "fixtures", "#{table_name}.yml"), 
+            m.template 'cairngorm/ruboss_scaffold/fixtures.yml',  File.join("test", "fixtures", "#{table_name}.yml"), 
               :collision => :force unless options[:flex_only]
           end
 
