@@ -4,7 +4,7 @@ package <%= base_package %>.models {
 <% end -%>
   import org.ruboss.models.RubossModel;
   
-  [Resource(controller="<%= class_name.downcase.pluralize %>")]
+  [Resource(name="<%= class_name.downcase.pluralize %>")]
   [Bindable]
   public class <%= class_name %> extends RubossModel {
 
