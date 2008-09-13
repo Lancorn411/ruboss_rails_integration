@@ -101,9 +101,6 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
                 :controller_plural_name
                 
   attr_accessor :constructor_args
-                  
-  alias_method  :controller_file_name,  :controller_underscore_name
-  alias_method  :controller_table_name, :controller_plural_name
   
   # Attribute readers and such from Restful Authentication Plugin
   attr_reader   :controller_name,
@@ -132,6 +129,9 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
   alias_method  :model_controller_table_name, :model_controller_plural_name
   
   attr_accessor :constructor_args
+                  
+  alias_method  :controller_file_name,  :controller_underscore_name
+  alias_method  :controller_table_name, :controller_plural_name
       
   def initialize(runtime_args, runtime_options = {})
     super
@@ -263,12 +263,12 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
           m.template 'cairngorm/attachment_fu/file_delegate.as.erb', File.join('app/flex', base_folder, 'business', "FileDelegate.as")
 
           unless options[:skip_migration]
-            m.migration_template 'cairngorm/attachment_fu/migration.rb', 'db/migrate', :assigns => {
+            m.migration_template 'cairngorm/attachment_fu/migration.rb.erb', 'db/migrate', :assigns => {
               :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}" },
               :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
           end
 
-          m.template 'cairngorm/attachment_fu/fixtures.yml', File.join('test/fixtures', "#{table_name}.yml")
+          m.template 'cairngorm/attachment_fu/fixtures.yml.erb', File.join('test/fixtures', "#{table_name}.yml")
 
           # Run the rcontroller generator to clobber the
           # RubossCommandController subclass to include the new models.
@@ -348,7 +348,7 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
             if options[:include_activation]
               m.template 'cairngorm/restful_authentication/mailer_test.rb', File.join('test/unit', class_path, "#{file_name}_mailer_test.rb")
             end
-            m.template 'cairngorm/restful_authentication/fixtures.yml',
+            m.template 'cairngorm/restful_authentication/fixtures.yml.erb',
                         File.join('test/fixtures', "#{table_name}.yml")
           end
 
@@ -393,7 +393,7 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
           end
 
           unless options[:skip_migration]
-            m.migration_template 'cairngorm/restful_authentication/migration.rb', 'db/migrate', :assigns => {
+            m.migration_template 'cairngorm/restful_authentication/migration.rb.erb', 'db/migrate', :assigns => {
               :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}" },
               :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
           end
@@ -423,7 +423,7 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
             :collision => :force unless options[:flex_only]
 
           unless options[:skip_fixture] 
-            m.template 'cairngorm/ruboss_scaffold/fixtures.yml',  File.join("test", "fixtures", "#{table_name}.yml"), 
+            m.template 'cairngorm/ruboss_scaffold/fixtures.yml.erb',  File.join("test", "fixtures", "#{table_name}.yml"), 
               :collision => :force unless options[:flex_only]
           end
 
