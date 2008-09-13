@@ -29,7 +29,7 @@ class <%= model_controller_class_name %>Controller < ApplicationController
     respond_to do |format|
       format.html
       format.xml  { render :xml => @<%= file_name %> }
-      format.fxml  { render :xml => @<%= file_name %> }
+      format.fxml  { render :fxml => @<%= file_name %> }
     end
   end
   
@@ -54,12 +54,12 @@ class <%= model_controller_class_name %>Controller < ApplicationController
            flash[:notice] = "Thanks for signing up!"
          end
          format.xml  { render :xml => @<%= file_name %>, :status => :created, :location => @<%= file_name %> }
-         format.fxml  { render :xml => @<%= file_name %> }
+         format.fxml  { render :fxml => @<%= file_name %> }
        end
      else
        format.html { render :action => "new" }
        format.xml  { render :xml => @<%= file_name %>.errors, :status => :unprocessable_entity }
-       format.fxml  { render :xml => @<%= file_name %>.errors }
+       format.fxml  { render :fxml => @<%= file_name %>.errors }
      end
    end
    rescue ActiveRecord::RecordInvalid

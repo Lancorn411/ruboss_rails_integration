@@ -12,7 +12,7 @@ class <%= class_name.pluralize %>Controller < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @<%= table_name %> }
-      format.fxml  { render :xml => @<%= table_name %> }
+      format.fxml  { render :fxml => @<%= table_name %> }
     end
   end
 
@@ -27,7 +27,7 @@ class <%= class_name.pluralize %>Controller < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @<%= file_name %> }
-      format.fxml  { render :xml => @<%= file_name %> }
+      format.fxml  { render :fxml => @<%= file_name %> }
     end
   end
 
@@ -39,7 +39,7 @@ class <%= class_name.pluralize %>Controller < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @<%= file_name %> }
-      format.fxml  { render :xml => @<%= file_name %> }
+      format.fxml  { render :fxml => @<%= file_name %> }
     end
   end
 
@@ -67,11 +67,11 @@ class <%= class_name.pluralize %>Controller < ApplicationController
         flash[:notice] = '<%= class_name %> was successfully created.'
         format.html { redirect_to(@<%= file_name %>) }
         format.xml  { render :xml => @<%= file_name %>, :status => :created, :location => @<%= file_name %> }
-        format.fxml  { render :xml => @<%= file_name %> }
+        format.fxml  { render :fxml => @<%= file_name %> }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @<%= file_name %>.errors, :status => :unprocessable_entity }
-        format.fxml  { render :xml => @<%= file_name %>.errors }
+        format.fxml  { render :fxml => @<%= file_name %>.errors }
       end
     end
   end
@@ -94,11 +94,11 @@ class <%= class_name.pluralize %>Controller < ApplicationController
     respond_to do |format|
       if @<%= file_name %>.save
         format.xml  { render :xml => @<%= file_name %> }
-        format.fxml  { render :xml => @<%= file_name %> }
+        format.fxml  { render :fxml => @<%= file_name %> }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @<%= file_name %>.errors, :status => :unprocessable_entity }
-        format.fxml  { render :xml => @<%= file_name %>.errors }
+        format.fxml  { render :fxml => @<%= file_name %>.errors }
       end
     end
   end
@@ -137,11 +137,11 @@ class <%= class_name.pluralize %>Controller < ApplicationController
         flash[:notice] = '<%= class_name %> was successfully updated.'
         format.html { redirect_to(@<%= file_name %>) }
         format.xml  { head :ok }
-        format.fxml  { render :xml => @<%= file_name %> }
+        format.fxml  { render :fxml => @<%= file_name %> }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @<%= file_name %>.errors, :status => :unprocessable_entity }
-        format.fxml  { render :xml => @<%= file_name %>.errors }
+        format.fxml  { render :fxml => @<%= file_name %>.errors }
       end
     end
   end
@@ -158,7 +158,7 @@ class <%= class_name.pluralize %>Controller < ApplicationController
     respond_to do |format|
       format.html { redirect_to(<%= table_name %>_url) }
       format.xml  { head :ok }
-      format.fxml  { render :xml => @<%= file_name %> }
+      format.fxml  { render :fxml => @<%= file_name %> }
     end
   end
 end
