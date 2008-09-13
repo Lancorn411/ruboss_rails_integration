@@ -33,34 +33,6 @@ package <%= base_package %>.controllers {
         defaultServiceId);
       Ruboss.commands = controller;
     }
-	
-	/**
-	 * These can be switched into the main RubossCommandsController class later...
-	 * It's basically cairngorm, but since this is the only part we need to add
-	 * CustomCommands, I am hacking it in here for now to avoid adding all of Cairngorm
-	 * which will just add unnecessary bulk.
-	 */
-	
-	public function addCustomCommand(commandName:String, cmd:Class, useWeakReference:Boolean = true):void {
-       commands[commandName] = cmd;
-       RubossCommandsEventDispatcher.getInstance().addEventListener(commandName, executeCustomCommand, false, 0, useWeakReference );
-    }
-
-	protected function executeCustomCommand(event:RubossEvent):void {
-       var commandToInitialise:Class = getCustomCommand(event.type);
-       var commandToExecute:ICommand = new commandToInitialise();
-
-       commandToExecute.execute(event);
-    }
-      
-   /**
-    * Returns the command class registered with the command name. 
-    */
-    protected function getCustomCommand(commandName:String):Class {
-       var command:Class = commands[commandName];
-         
-       return command;
-    }
   }
 }
 
