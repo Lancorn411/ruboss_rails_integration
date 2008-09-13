@@ -113,20 +113,20 @@
 	  dragMoveEnabled="true"
 	  dropEnabled="true"
       dataProvider="{Ruboss.models.index(<%= class_name %>)}"
-      change="_<%= class_name.downcase_first_letter %> = <%= class_name %>(<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem)">
+      change="_<%= class_name.downcase_first_letter %> = RubossUtils.clone(<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem) as <%= class_name %>">
       <mx:columns>
 <% for attribute in attributes -%><% unless attribute.name == "with_user" %><% if attribute.type == "boolean" -%>
         <mx:DataGridColumn editable="false" width="80" minWidth="80"
-          headerText="<%= attribute.name.capitalize_without_downcasing %>"
-          dataField="<%= attribute.name %>">
+          headerText="<%= attribute.flex_name.capitalize_without_downcasing %>"
+          dataField="<%= attribute.flex_name %>">
         </mx:DataGridColumn>
 <% elsif attribute.model_type -%>
         <mx:DataGridColumn editable="false" sortable="false"
-          width="150" dataField="<%= attribute.name %>"
+          width="150" dataField="<%= attribute.flex_name %>"
           headerText="<%= attribute.name.capitalize_without_downcasing %>">
         </mx:DataGridColumn>
 <% else -%>
-        <mx:DataGridColumn dataField="<%= attribute.name %>" headerText="<%= attribute.name.capitalize_without_downcasing %>"
+        <mx:DataGridColumn dataField="<%= attribute.flex_name %>" headerText="<%= attribute.name.capitalize_without_downcasing %>"
           width="150" minWidth="100"/>
 <% end -%><% end -%>
 <% end -%>

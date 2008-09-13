@@ -4,10 +4,9 @@ package <%= base_package %>.models {
 <% end -%>
   import org.ruboss.models.RubossModel;
   
-  [Resource(name="<%= class_name.downcase.pluralize %>")]
+  [Resource(name="<%= resource_controller_name %>")]
   [Bindable]
   public class <%= class_name %> extends RubossModel {
-
 <% if attributes && !attributes.empty? && attributes[0].flex_type != "Boolean" -%>
     public static const LABEL:String = "<%= attributes[0].flex_name %>";
 <% else -%>
@@ -15,7 +14,7 @@ package <%= base_package %>.models {
 <% end -%>
 
 <% for attribute in attributes -%>
-<% if attribute.type == :datetime -%>
+<% if attribute.type == :datetime || attribute.type == :time -%>
     [DateTime]
 <% end -%>
     public var <%= attribute.flex_name %>:<%= attribute.flex_type %>;
@@ -36,9 +35,8 @@ package <%= base_package %>.models {
     public var <%= model.camelcase(:lower) %>:ModelsCollection;
     
 <% end -%>
-    public function <%= class_name %>(
-    ) {
-	   super(LABEL);
+    public function <%= class_name %>() {
+      super(LABEL);
     }
   }
 }
