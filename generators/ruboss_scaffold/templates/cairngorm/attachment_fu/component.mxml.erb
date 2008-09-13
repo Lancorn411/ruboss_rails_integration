@@ -126,7 +126,7 @@
           headerText="<%= attribute.name.capitalize_without_downcasing %>">
         </mx:DataGridColumn>
 <% else -%>
-        <mx:DataGridColumn dataField="<%= attribute.flex_name %>" headerText="<%= attribute.name.capitalize_without_downcasing %>"
+        <mx:DataGridColumn dataField="<%= attribute.flex_name %>" headerText="<%= attribute.flex_name.capitalize_without_downcasing %>"
           width="150" minWidth="100"/>
 <% end -%><% end -%>
 <% end -%>
@@ -136,7 +136,7 @@
 		  width="150" minWidth="100"/>
 		<mx:DataGridColumn dataField="size" headerText="Size"
 		  width="150" minWidth="100"/>
-		<mx:DataGridColumn dataField="contentType" headerText="Content Type"
+		<mx:DataGridColumn dataField="contentType" headerText="ContentType"
 		  width="150" minWidth="100"/>
       </mx:columns>
     </mx:DataGrid>
