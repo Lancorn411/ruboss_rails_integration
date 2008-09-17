@@ -427,7 +427,9 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
         end
       end
     end
-
+      if options[:custom_command]
+        m.template 'ruboss_scaffold/custom_command.as.erb', File.join('app/flex', base_folder, 'commands', "Custom#{@class_name}Command.as")
+      end
       # Run the rcontroller generator to clobber the
       # RubossCommandController subclass to include the new models.
       m.dependency 'ruboss_controller', [name] + @args, :collision => :force

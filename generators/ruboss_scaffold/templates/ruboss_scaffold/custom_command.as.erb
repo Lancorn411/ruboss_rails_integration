@@ -1,0 +1,43 @@
+package <%= base_package %>.commands {
+
+	import org.ruboss.Ruboss;
+	import org.ruboss.events.RubossEvent;
+	import org.ruboss.controllers.ICommand;
+	
+	import mx.rpc.IResponder;
+	import mx.rpc.events.FaultEvent;
+	import mx.rpc.events.ResultEvent;
+	import mx.controls.Alert;
+	
+	import <%= base_package %>.models.<%= class_name %>;
+	import <%= base_package %>.models.<%= project_name %>ModelLocator;
+	import <%= base_package %>.controllers.<%= project_name %>Event;
+
+	public class Custom<%= class_name %>Command implements ICommand, IResponder {
+	
+		private var _<%= class_name.downcase_first_letter %>:<%= class_name %>;
+		private var appModel:<%= project_name %>ModelLocator = <%= project_name %>ModelLocator.getInstance();
+
+    	public function Custom<%= class_name %>Command() {
+			super();
+		}
+	
+		public function execute(event:RubossEvent):void {
+			_<%= class_name.downcase_first_letter %> = event.data as <%= class_name %>;
+			Ruboss.http({resultHandler: result
+						 faultHandler: fault
+						 contentType: "application/xml"}).invoke({URL: "<%= controller_plural_name %>.fxml",
+																  method: "POST",
+																  data: _<%= class_name.downcase_first_letter,
+																  unmarshall: true});
+		}
+		
+		public function result(event:Object):void {
+		 	appModel.<%= class_name.downcase_first_letter %> = event.result as <%= class_name %>;
+	    }
+
+	    public function fault(event:Object):void {
+			Alert.show("There was an error: " + event); 
+	    }
+	}
+}
