@@ -53,8 +53,8 @@ package <%= base_package %>.commands {
     	public function list<%= class_name.pluralize %>():void {
 			Ruboss.models.index(<%= class_name %>);
 			//If you want to pass metadata to the rails controller, then do something like this:
-			//Ruboss.models.index(<%= class_name %>, {metadata: {<%= resource_controller_name %>_id:_<%= class_name.downcase_first_letter %>.id}});
-			//The {metadata} will be accessed through the params[:<%= resource_controller_name %>_id] hash in Ruby.
+			//Ruboss.models.index(<%= class_name %>, {metadata: {<%= controller_singular_name %>_id:_<%= class_name.downcase_first_letter %>.id}});
+			//The {metadata} will be accessed through the params[:<%= controller_singular_name %>_id] hash in Ruby.
 		}
 		
 		/**

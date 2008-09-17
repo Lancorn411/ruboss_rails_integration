@@ -267,10 +267,6 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
 
         m.template 'attachment_fu/fixtures.yml.erb', File.join('test/fixtures', "#{table_name}.yml")
 
-        # Run the rcontroller generator to clobber the
-        # RubossCommandController subclass to include the new models.
-        m.dependency 'rcontroller', [name] + @args, :collision => :force
-
       # Restful_Authentication configuration...
       else if options[:authenticated]
         # Check for class naming collisions.
@@ -430,6 +426,7 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
           }, :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}" unless options[:flex_only]
         end
       end
+    end
 
       # Run the rcontroller generator to clobber the
       # RubossCommandController subclass to include the new models.
