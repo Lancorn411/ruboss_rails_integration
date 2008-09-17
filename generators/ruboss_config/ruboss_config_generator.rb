@@ -23,7 +23,8 @@ class RubossConfigGenerator < Rails::Generator::Base
               :command_controller_name, 
               :component_names, 
               :application_tag,
-              :use_air
+              :use_air,
+              :model_names
 
   def initialize(runtime_args, runtime_options = {})
     super
@@ -121,6 +122,19 @@ class RubossConfigGenerator < Rails::Generator::Base
         "Default: false") { |v| options[:air_config] = v }
       opt.on("-s", "--skip-framework", "Don't fetch the latest framework binary. You'll have to link/build the framework yourself.", 
         "Default: false") { |v| options[:skip_framework] = v }
+    end
+    
+    # These two methods, model_names and list_as_files, are used to
+    # create the Events.as class properly
+    def model_names
+      @model_names = []
+      if File.exists?("app/flex/#{base_folder}/models")
+        @model_names = list_as_files("app/flex/#{base_folder}/models")
+      end
+    end
+    
+    def list_as_files(dir_name)
+      Dir.entries(dir_name).grep(/\.as$/).map { |name| name.sub(/\.as$/, "") }
     end
 
     def banner

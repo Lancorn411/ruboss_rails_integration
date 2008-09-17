@@ -21,8 +21,6 @@ class RubossControllerGenerator < Rails::Generator::Base
               :command_controller_name,
               :model_names, 
               :command_names
-              # added for RESTful Event.as class
-              :model_names
 
   def initialize(runtime_args, runtime_options = {})
     super
