@@ -24,8 +24,6 @@ class RubossConfigGenerator < Rails::Generator::Base
               :component_names, 
               :application_tag,
               :use_air
-              # added for Events.as class
-              :model_names
 
   def initialize(runtime_args, runtime_options = {})
     super
@@ -114,19 +112,6 @@ class RubossConfigGenerator < Rails::Generator::Base
   end
 
   protected
-    # These two methods, model_names and list_as_files, are used to
-    # create the Events.as class properly
-    def model_names
-      @model_names = []
-      if File.exists?("app/flex/#{base_folder}/models")
-        @model_names = list_as_files("app/flex/#{base_folder}/models")
-      end
-    end
-    
-    def list_as_files(dir_name)
-      Dir.entries(dir_name).grep(/\.as$/).map { |name| name.sub(/\.as$/, "") }
-    end
-    
     def add_options!(opt)
       opt.separator ''
       opt.separator 'Options:'
