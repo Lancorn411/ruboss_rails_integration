@@ -450,6 +450,8 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
         "Generate signup 'activation code' confirmation via email") { |v| options[:attachment_fu] = true }
       opt.on("--authenticated", 
         "Generate authenticated user and sessions") { |v| options[:authenticated] = true }
+      opt.on("--custom-command", 
+        "Generate custom command class for model on top of RESTful commands") { |v| options[:custom_command] = true }
       opt.on("--skip-migration", 
         "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
       opt.on("--include-activation", 
