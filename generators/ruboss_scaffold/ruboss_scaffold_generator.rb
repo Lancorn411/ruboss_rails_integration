@@ -236,233 +236,196 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
     record do |m|
       m.dependency 'scaffold', [name] + @args, :skip_migration => true, :collision => :skip unless options[:flex_only]
       
-      # If you want your Flexible Rails application to be wired for Cairngorm...
-      if options[:cairngorm]
-        
-        # Attachment_fu configuration...
-        if options[:attachment_fu]
-          m.template 'attachment_fu/model.rb',      File.join('app/models', class_path, "#{file_name}.rb")
+      # Attachment_fu configuration...
+      if options[:attachment_fu]
+        m.template 'attachment_fu/model.rb',      File.join('app/models', class_path, "#{file_name}.rb")
 
-          m.template 'attachment_fu/controller.rb', File.join('app/controllers', class_path, "#{file_name.pluralize}_controller.rb")
+        m.template 'attachment_fu/controller.rb', File.join('app/controllers', class_path, "#{file_name.pluralize}_controller.rb")
 
-          m.template 'attachment_fu/model.as.erb',
-            File.join("app", "flex", base_folder, "models", "#{@class_name}.as"), 
-            :assigns => { :ruboss_controller_name => "#{file_name.pluralize}" } 
+        m.template 'attachment_fu/model.as.erb',
+          File.join("app", "flex", base_folder, "models", "#{@class_name}.as"), 
+          :assigns => { :ruboss_controller_name => "#{file_name.pluralize}" } 
 
-          # copied these from below because they weren't working and i didn't want to mess with it...     
-          m.template 'attachment_fu/component.mxml.erb',
-            File.join("app", "flex", base_folder, "components", "generated", "#{@class_name}Box.mxml"), 
-            :assigns => { :ruboss_controller_name => "#{file_name.pluralize}" }
-          m.route_resources table_name
+        # copied these from below because they weren't working and i didn't want to mess with it...     
+        m.template 'attachment_fu/component.mxml.erb',
+          File.join("app", "flex", base_folder, "components", "generated", "#{@class_name}Box.mxml"), 
+          :assigns => { :ruboss_controller_name => "#{file_name.pluralize}" }
+        m.route_resources table_name
 
-          # Create Custom RESTful Command classes based on Model
-          # (AppEvents and the AppController are created using the rconfig command)
-          m.directory File.join('app/flex', base_folder, "commands")
-          m.directory File.join('app/flex', base_folder, "business")
-          m.template 'attachment_fu/command.as.erb', File.join('app/flex', base_folder, 'commands', "#{@class_name}Command.as")
-          m.template 'attachment_fu/file_delegate.as.erb', File.join('app/flex', base_folder, 'business', "FileDelegate.as")
+        # Create Custom RESTful Command classes based on Model
+        # (AppEvents and the AppController are created using the rconfig command)
+        m.directory File.join('app/flex', base_folder, "commands")
+        m.directory File.join('app/flex', base_folder, "business")
+        m.template 'attachment_fu/command.as.erb', File.join('app/flex', base_folder, 'commands', "#{@class_name}Command.as")
+        m.template 'attachment_fu/file_delegate.as.erb', File.join('app/flex', base_folder, 'business', "FileDelegate.as")
 
-          unless options[:skip_migration]
-            m.migration_template 'attachment_fu/migration.rb.erb', 'db/migrate', :assigns => {
-              :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}" },
-              :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
-          end
+        unless options[:skip_migration]
+          m.migration_template 'attachment_fu/migration.rb.erb', 'db/migrate', :assigns => {
+            :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}" },
+            :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
+        end
 
-          m.template 'attachment_fu/fixtures.yml.erb', File.join('test/fixtures', "#{table_name}.yml")
+        m.template 'attachment_fu/fixtures.yml.erb', File.join('test/fixtures', "#{table_name}.yml")
 
-          # Run the rcontroller generator to clobber the
-          # RubossCommandController subclass to include the new models.
-          m.dependency 'rcontroller', [name] + @args, :collision => :force
+        # Run the rcontroller generator to clobber the
+        # RubossCommandController subclass to include the new models.
+        m.dependency 'rcontroller', [name] + @args, :collision => :force
 
-        # Restful_Authentication configuration...
-        else if options[:authenticated]
-          # Check for class naming collisions.
-          m.class_collisions controller_class_path,       "#{controller_class_name}_controller", # Sessions Controller
-                                                          "#{controller_class_name}_helper"
-          m.class_collisions model_controller_class_path, "#{model_controller_class_name}_controller", # Model Controller
-                                                          "#{model_controller_class_name}_helper"
-          m.class_collisions class_path,                  "#{class_name}", "#{class_name}_mailer", "#{class_name}_mailer_mest", "#{class_name}_observer"
-          m.class_collisions [], 'AuthenticatedSystem', 'AuthenticatedTestHelper'
+      # Restful_Authentication configuration...
+      else if options[:authenticated]
+        # Check for class naming collisions.
+        m.class_collisions controller_class_path,       "#{controller_class_name}_controller", # Sessions Controller
+                                                        "#{controller_class_name}_helper"
+        m.class_collisions model_controller_class_path, "#{model_controller_class_name}_controller", # Model Controller
+                                                        "#{model_controller_class_name}_helper"
+        m.class_collisions class_path,                  "#{class_name}", "#{class_name}_mailer", "#{class_name}_mailer_mest", "#{class_name}_observer"
+        m.class_collisions [], 'AuthenticatedSystem', 'AuthenticatedTestHelper'
 
-          # Controller, helper, views, and test directories.
-          m.directory File.join('app/models', class_path)
-          m.directory File.join('app/controllers', controller_class_path)
-          m.directory File.join('app/controllers', model_controller_class_path)
-          m.directory File.join('app/helpers', controller_class_path)
-          m.directory File.join('app/views', controller_class_path, controller_file_name)
-          m.directory File.join('app/views', class_path, "#{file_name}_mailer") if options[:include_activation]
+        # Controller, helper, views, and test directories.
+        m.directory File.join('app/models', class_path)
+        m.directory File.join('app/controllers', controller_class_path)
+        m.directory File.join('app/controllers', model_controller_class_path)
+        m.directory File.join('app/helpers', controller_class_path)
+        m.directory File.join('app/views', controller_class_path, controller_file_name)
+        m.directory File.join('app/views', class_path, "#{file_name}_mailer") if options[:include_activation]
 
-          m.directory File.join('app/controllers', model_controller_class_path)
-          m.directory File.join('app/helpers', model_controller_class_path)
-          m.directory File.join('app/views', model_controller_class_path, model_controller_file_name)
+        m.directory File.join('app/controllers', model_controller_class_path)
+        m.directory File.join('app/helpers', model_controller_class_path)
+        m.directory File.join('app/views', model_controller_class_path, model_controller_file_name)
 
-          if @rspec
-            m.directory File.join('spec/controllers', controller_class_path)
-            m.directory File.join('spec/controllers', model_controller_class_path)
-            m.directory File.join('spec/models', class_path)
-            m.directory File.join('spec/fixtures', class_path)
-          else
-            m.directory File.join('test/functional', controller_class_path)
-            m.directory File.join('test/functional', model_controller_class_path)
-            m.directory File.join('test/unit', class_path)
-          end
-
-          m.template 'restful_authentication/model.rb',
-                      File.join('app/models', class_path, "#{file_name}.rb")
-
-          if options[:include_activation]
-            %w( mailer observer ).each do |model_type|
-              m.template "restful_authentication/#{model_type}.rb", File.join('app/models', class_path, "#{file_name}_#{model_type}.rb")
-            end
-          end
-
-          m.template 'restful_authentication/controller.rb',
-                      File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
-
-          m.template 'restful_authentication/model_controller.rb',
-                      File.join('app/controllers', model_controller_class_path, "#{model_controller_file_name}_controller.rb")
-
-          m.template 'restful_authentication/authenticated_system.rb',
-                      File.join('lib', 'authenticated_system.rb')
-
-          m.template 'restful_authentication/authenticated_test_helper.rb',
-                      File.join('lib', 'authenticated_test_helper.rb')
-
-          if @rspec
-            m.template 'restful_authentication/functional_spec.rb',
-                        File.join('spec/controllers', controller_class_path, "#{controller_file_name}_controller_spec.rb")
-            m.template 'restful_authentication/model_functional_spec.rb',
-                        File.join('spec/controllers', model_controller_class_path, "#{model_controller_file_name}_controller_spec.rb")
-            m.template 'restful_authentication/unit_spec.rb',
-                        File.join('spec/models', class_path, "#{file_name}_spec.rb")
-            m.template 'restful_authentication/fixtures_authenticate.yml',
-                        File.join('spec/fixtures', "#{table_name}.yml")
-          else
-            m.template 'restful_authentication/functional_test.rb',
-                        File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb")
-            m.template 'restful_authentication/model_functional_test.rb',
-                        File.join('test/functional', model_controller_class_path, "#{model_controller_file_name}_controller_test.rb")
-            m.template 'restful_authentication/unit_test.rb',
-                        File.join('test/unit', class_path, "#{file_name}_test.rb")
-
-            if options[:include_activation]
-              m.template 'restful_authentication/mailer_test.rb', File.join('test/unit', class_path, "#{file_name}_mailer_test.rb")
-            end
-            m.template 'restful_authentication/fixtures.yml.erb',
-                        File.join('test/fixtures', "#{table_name}.yml")
-          end
-
-          m.template 'restful_authentication/helper.rb',
-                      File.join('app/helpers', controller_class_path, "#{controller_file_name}_helper.rb")
-
-          m.template 'restful_authentication/model_helper.rb',
-                      File.join('app/helpers', model_controller_class_path, "#{model_controller_file_name}_helper.rb")
-
-          # Rails View templates
-          m.directory File.join('app/views', controller_class_path, controller_file_name)
-          m.directory File.join('app/views', model_controller_class_path, model_controller_file_name)
-          m.template 'restful_authentication/login.html.erb',  File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
-          m.template 'restful_authentication/signup.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.html.erb")
-
-          # Flex Login and Account View templates
-          m.directory File.join('app/flex', base_package, "components/generated/users")
-          m.template 'restful_authentication/login.mxml.erb', File.join('app/flex', base_package, "components/generated/users", "LoginBox.mxml")
-          m.template 'restful_authentication/signup.mxml.erb', File.join('app/flex', base_package, "components/generated/users", "SignupBox.mxml")
-          m.template 'restful_authentication/account.mxml.erb', File.join('app/flex', base_package, "components/generated/users", "AccountBox.mxml")
-
-          # Flex Login and Session Command templates
-          m.template 'restful_authentication/command.as.erb', File.join('app/flex', base_package, "commands", "SessionsCommand.as")
-          m.template 'restful_authentication/model_command.as.erb', File.join('app/flex', base_package, "commands", "#{@class_name}Command.as")
-
-          m.template 'restful_authentication/model.as.erb',
-            File.join("app", "flex", base_folder, "models", "#{@class_name}.as"), 
-            :assigns => { :ruboss_controller_name => "#{file_name.pluralize}" }
-
-          # Validators for Flex Login and Account Creation (from Pomodo at FlexibleRails)
-          m.directory "app/flex/com/pomodo/validators"
-          %w(PasswordConfirmationValidator.as ServerErrors.as ServerErrorValidator.as).each do |file|
-            m.file "restful_authentication/validators/#{file}", "app/flex/com/pomodo/validators/#{file}"
-          end
-
-          if options[:include_activation]
-            # Mailer templates
-            %w( activation signup_notification ).each do |action|
-              m.template "restful_authentication/#{action}.html.erb",
-                  File.join('app/views', "#{file_name}_mailer", "#{action}.html.erb")
-            end
-          end
-
-          unless options[:skip_migration]
-            m.migration_template 'restful_authentication/migration.rb.erb', 'db/migrate', :assigns => {
-              :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}" },
-              :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
-          end
-          
-        # If no plugins are specified, but you still want Cairngorm, this is what you will get...
+        if @rspec
+          m.directory File.join('spec/controllers', controller_class_path)
+          m.directory File.join('spec/controllers', model_controller_class_path)
+          m.directory File.join('spec/models', class_path)
+          m.directory File.join('spec/fixtures', class_path)
         else
-          # Generate Flex AS model and MXML component based on the
-          # Ruboss templates.
-          m.template 'ruboss_scaffold/model.as.erb',
-            File.join("app", "flex", base_folder, "models", "#{@class_name}.as"), 
-            :assigns => { :resource_controller_name => "#{file_name.pluralize}" }
+          m.directory File.join('test/functional', controller_class_path)
+          m.directory File.join('test/functional', model_controller_class_path)
+          m.directory File.join('test/unit', class_path)
+        end
 
-          m.template 'ruboss_scaffold/component.mxml.erb',
-            File.join("app", "flex", base_folder, "components", "generated", "#{@class_name}Box.mxml"), 
-            :assigns => { :resource_controller_name => "#{file_name.pluralize}" }
+        m.template 'restful_authentication/model.rb',
+                    File.join('app/models', class_path, "#{file_name}.rb")
 
-          # Create Custom RESTful Command classes based on the Model
-          # (AppEvents and the AppController are created using the ruboss_config command)
-          m.directory File.join('app/flex', base_folder, "commands")
-          m.template 'ruboss_scaffold/command.as.erb', File.join('app/flex', base_folder, 'commands', "#{@class_name}Command.as")
-
-          m.template 'ruboss_scaffold/controller.rb.erb', File.join("app/controllers", controller_class_path, 
-            "#{controller_file_name}_controller.rb"), :collision => :force unless options[:flex_only]
-
-          # Create a new generated ActiveRecord model based on the Ruboss templates.
-          m.template 'ruboss_scaffold/model.rb.erb', File.join("app", "models", "#{file_name}.rb"), 
-            :collision => :force unless options[:flex_only]
-
-          unless options[:skip_fixture] 
-            m.template 'ruboss_scaffold/fixtures.yml.erb',  File.join("test", "fixtures", "#{table_name}.yml"), 
-              :collision => :force unless options[:flex_only]
-          end
-
-          unless options[:skip_migration]
-            m.migration_template 'ruboss_scaffold/migration.rb.erb', 'db/migrate', :assigns => {
-              :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}"
-            }, :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}" unless options[:flex_only]
+        if options[:include_activation]
+          %w( mailer observer ).each do |model_type|
+            m.template "restful_authentication/#{model_type}.rb", File.join('app/models', class_path, "#{file_name}_#{model_type}.rb")
           end
         end
-      end
 
-      # If you want the original setup (without Cairngorm, PureMVC, Mate, etc.)...
+        m.template 'restful_authentication/controller.rb',
+                    File.join('app/controllers', controller_class_path, "#{controller_file_name}_controller.rb")
+
+        m.template 'restful_authentication/model_controller.rb',
+                    File.join('app/controllers', model_controller_class_path, "#{model_controller_file_name}_controller.rb")
+
+        m.template 'restful_authentication/authenticated_system.rb',
+                    File.join('lib', 'authenticated_system.rb')
+
+        m.template 'restful_authentication/authenticated_test_helper.rb',
+                    File.join('lib', 'authenticated_test_helper.rb')
+
+        if @rspec
+          m.template 'restful_authentication/functional_spec.rb',
+                      File.join('spec/controllers', controller_class_path, "#{controller_file_name}_controller_spec.rb")
+          m.template 'restful_authentication/model_functional_spec.rb',
+                      File.join('spec/controllers', model_controller_class_path, "#{model_controller_file_name}_controller_spec.rb")
+          m.template 'restful_authentication/unit_spec.rb',
+                      File.join('spec/models', class_path, "#{file_name}_spec.rb")
+          m.template 'restful_authentication/fixtures_authenticate.yml',
+                      File.join('spec/fixtures', "#{table_name}.yml")
+        else
+          m.template 'restful_authentication/functional_test.rb',
+                      File.join('test/functional', controller_class_path, "#{controller_file_name}_controller_test.rb")
+          m.template 'restful_authentication/model_functional_test.rb',
+                      File.join('test/functional', model_controller_class_path, "#{model_controller_file_name}_controller_test.rb")
+          m.template 'restful_authentication/unit_test.rb',
+                      File.join('test/unit', class_path, "#{file_name}_test.rb")
+
+          if options[:include_activation]
+            m.template 'restful_authentication/mailer_test.rb', File.join('test/unit', class_path, "#{file_name}_mailer_test.rb")
+          end
+          m.template 'restful_authentication/fixtures.yml.erb',
+                      File.join('test/fixtures', "#{table_name}.yml")
+        end
+
+        m.template 'restful_authentication/helper.rb',
+                    File.join('app/helpers', controller_class_path, "#{controller_file_name}_helper.rb")
+
+        m.template 'restful_authentication/model_helper.rb',
+                    File.join('app/helpers', model_controller_class_path, "#{model_controller_file_name}_helper.rb")
+
+        # Rails View templates
+        m.directory File.join('app/views', controller_class_path, controller_file_name)
+        m.directory File.join('app/views', model_controller_class_path, model_controller_file_name)
+        m.template 'restful_authentication/login.html.erb',  File.join('app/views', controller_class_path, controller_file_name, "new.html.erb")
+        m.template 'restful_authentication/signup.html.erb', File.join('app/views', model_controller_class_path, model_controller_file_name, "new.html.erb")
+
+        # Flex Login and Account View templates
+        m.directory File.join('app/flex', base_package, "components/generated/users")
+        m.template 'restful_authentication/login.mxml.erb', File.join('app/flex', base_package, "components/generated/users", "LoginBox.mxml")
+        m.template 'restful_authentication/signup.mxml.erb', File.join('app/flex', base_package, "components/generated/users", "SignupBox.mxml")
+        m.template 'restful_authentication/account.mxml.erb', File.join('app/flex', base_package, "components/generated/users", "AccountBox.mxml")
+
+        # Flex Login and Session Command templates
+        m.template 'restful_authentication/command.as.erb', File.join('app/flex', base_package, "commands", "SessionsCommand.as")
+        m.template 'restful_authentication/model_command.as.erb', File.join('app/flex', base_package, "commands", "#{@class_name}Command.as")
+
+        m.template 'restful_authentication/model.as.erb',
+          File.join("app", "flex", base_folder, "models", "#{@class_name}.as"), 
+          :assigns => { :ruboss_controller_name => "#{file_name.pluralize}" }
+
+        # Validators for Flex Login and Account Creation (from Pomodo at FlexibleRails)
+        m.directory "app/flex/com/pomodo/validators"
+        %w(PasswordConfirmationValidator.as ServerErrors.as ServerErrorValidator.as).each do |file|
+          m.file "restful_authentication/validators/#{file}", "app/flex/com/pomodo/validators/#{file}"
+        end
+
+        if options[:include_activation]
+          # Mailer templates
+          %w( activation signup_notification ).each do |action|
+            m.template "restful_authentication/#{action}.html.erb",
+                File.join('app/views', "#{file_name}_mailer", "#{action}.html.erb")
+          end
+        end
+
+        unless options[:skip_migration]
+          m.migration_template 'restful_authentication/migration.rb.erb', 'db/migrate', :assigns => {
+            :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}" },
+            :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}"
+        end
+        
+      # If no plugins are specified, this is what you will get...
       else
-        m.dependency 'scaffold', [name] + @args, :skip_migration => true, :collision => :skip unless options[:flex_only]
-
         # Generate Flex AS model and MXML component based on the
         # Ruboss templates.
-        m.template 'model.as.erb',
+        m.template 'ruboss_scaffold/model.as.erb',
           File.join("app", "flex", base_folder, "models", "#{@class_name}.as"), 
           :assigns => { :resource_controller_name => "#{file_name.pluralize}" }
 
-        m.template 'component.mxml.erb',
+        m.template 'ruboss_scaffold/component.mxml.erb',
           File.join("app", "flex", base_folder, "components", "generated", "#{@class_name}Box.mxml"), 
           :assigns => { :resource_controller_name => "#{file_name.pluralize}" }
 
-        m.template 'controller.rb.erb', File.join("app/controllers", controller_class_path, 
+        # Create Custom RESTful Command classes based on the Model
+        # (AppEvents and the AppController are created using the ruboss_config command)
+        m.directory File.join('app/flex', base_folder, "commands")
+        m.template 'ruboss_scaffold/command.as.erb', File.join('app/flex', base_folder, 'commands', "#{@class_name}Command.as")
+
+        m.template 'ruboss_scaffold/controller.rb.erb', File.join("app/controllers", controller_class_path, 
           "#{controller_file_name}_controller.rb"), :collision => :force unless options[:flex_only]
 
         # Create a new generated ActiveRecord model based on the Ruboss templates.
-        m.template 'model.rb.erb', File.join("app", "models", "#{file_name}.rb"), 
+        m.template 'ruboss_scaffold/model.rb.erb', File.join("app", "models", "#{file_name}.rb"), 
           :collision => :force unless options[:flex_only]
 
         unless options[:skip_fixture] 
-          m.template 'fixtures.yml.erb',  File.join("test", "fixtures", "#{table_name}.yml"), 
+          m.template 'ruboss_scaffold/fixtures.yml.erb',  File.join("test", "fixtures", "#{table_name}.yml"), 
             :collision => :force unless options[:flex_only]
         end
 
         unless options[:skip_migration]
-          m.migration_template 'migration.rb.erb', 'db/migrate', :assigns => {
+          m.migration_template 'ruboss_scaffold/migration.rb.erb', 'db/migrate', :assigns => {
             :migration_name => "Create#{class_name.pluralize.gsub(/::/, '')}"
           }, :migration_file_name => "create_#{file_path.gsub(/\//, '_').pluralize}" unless options[:flex_only]
         end
@@ -484,8 +447,6 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
       opt.separator 'Options:'
       opt.on("-f", "--flex-only", "Scaffold Flex code only", 
         "Default: false") { |v| options[:flex_only] = v}
-      opt.on("--cairngorm", "Wire up your Flexible Rails application using the Cairngorm Framework.", 
-        "Default: false") { |v| options[:cairngorm] = v }
       opt.on("--attachment", 
         "Generate signup 'activation code' confirmation via email") { |v| options[:attachment_fu] = true }
       opt.on("--authenticated", 
