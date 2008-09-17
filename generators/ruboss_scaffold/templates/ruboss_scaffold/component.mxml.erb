@@ -15,7 +15,7 @@
   import <%= base_package %>.models.<%= attribute.flex_name.capitalize_without_downcasing %>;
 <% end -%>
 <% end -%>
-  import <%= base_package %>.controllers.RESTful<%= project_name %>Event;
+  import <%= base_package %>.controllers.<%= project_name %>Event;
 
   [Bindable]
   private var _<%= class_name.downcase_first_letter %>:<%= class_name %> = new <%= class_name %>();
@@ -72,13 +72,13 @@
     </mx:Form>
     <mx:ControlBar width="100%">
       <mx:Button label="Save <%= class_name %>" width="33%" height="30"
-        click="send<%= class_name %>Data(RESTful<%= project_name %>Event.CREATE_<%= class_name.upcase %>)"/>
+        click="send<%= class_name %>Data(<%= project_name %>Event.CREATE_<%= class_name.upcase %>)"/>
       <mx:Button label="Update <%= class_name %>" width="33%" height="30"
 	    enabled="{<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem != null}"
-	    click="send<%= class_name %>Data(RESTful<%= project_name %>Event.UPDATE_<%= class_name.upcase %>)"/>
+	    click="send<%= class_name %>Data(<%= project_name %>Event.UPDATE_<%= class_name.upcase %>)"/>
 	  <mx:Button label="Delete <%= class_name %>" width="33%" height="30"
 	    enabled="{<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem != null}"
-	    click="send<%= class_name %>Data(RESTful<%= project_name %>Event.DESTROY_<%= class_name.upcase %>)"/>
+	    click="send<%= class_name %>Data(<%= project_name %>Event.DESTROY_<%= class_name.upcase %>)"/>
     </mx:ControlBar>
   </mx:Panel>
   <mx:Panel id="<%= class_name.downcase_first_letter.pluralize %>Panel"

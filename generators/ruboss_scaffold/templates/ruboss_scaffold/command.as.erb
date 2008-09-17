@@ -6,9 +6,9 @@ package <%= base_package %>.commands {
 	import org.ruboss.utils.RubossUtils;
 	
 	import <%= base_package %>.models.<%= class_name %>;
-	import <%= base_package %>.controllers.RESTful<%= project_name %>Event;
+	import <%= base_package %>.controllers.<%= project_name %>Event;
 
-	public class RESTful<%= class_name %>Commands implements ICommand {
+	public class <%= class_name %>Commands implements ICommand {
 	
 		private var _<%= class_name.downcase_first_letter %>:<%= class_name %>;
 	
@@ -18,7 +18,7 @@ package <%= base_package %>.commands {
 	 	 * This allows common RESTful functions (show, create, update, delete)
 	 	 * to be reused by multiple views, thereby following the DRY principle.
      	 */
-    	public function RESTful<%= class_name %>Commands() {
+    	public function <%= class_name %>Commands() {
 			super();
 		}
 	
