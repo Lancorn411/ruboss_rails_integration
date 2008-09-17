@@ -24,8 +24,8 @@
         Ruboss.commands.execute(eventType);
     }
     
-    private function onComplete():void {<% for model in model_names %><% unless model == "#{project_name}ModelLocator" %>
-		Ruboss.commands.execute(<%= project_name %>Events.LIST_<%= model.pluralize.upcase %>);<% end -%><% end -%>
+    private function onComplete():void {<% for model in event_names %><% unless model == "#{project_name}ModelLocator" %>
+		Ruboss.commands.execute(<%= project_name %>Event.LIST_<%= model.pluralize.upcase %>);<% end -%><% end -%>
 	
 	}
 ]]>

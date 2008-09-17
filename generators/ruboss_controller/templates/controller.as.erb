@@ -1,6 +1,6 @@
 package <%= base_package %>.controllers {
   import <%= base_package %>.models.*;
-  import <%= base_package %>.Command.*;
+  import <%= base_package %>.commands.*;
   import <%= base_package %>.controllers.<%= project_name %>Events;
 	
   import org.ruboss.Ruboss;
@@ -9,7 +9,7 @@ package <%= base_package %>.controllers {
 
   import org.ruboss.events.RubossEvent;
   import org.ruboss.controllers.ICommand;
-  import org.ruboss.controllers.RubossCommandEventDispatcher;
+  import org.ruboss.controllers.RubossCommandsEventDispatcher;
 
   import <%= base_package %>.commands.*;
 
@@ -20,16 +20,16 @@ package <%= base_package %>.controllers {
     
     public function <%= command_controller_name %>(enforcer:SingletonEnforcer, extraServices:Array,
       defaultServiceId:int = -1) {
-      super([<%= command_names %>] /* Commands */
+      super([<%= command_names %>], /* Commands */
 		models, extraServices, defaultServiceId);
 	  
 	  initializeCommand();
     }
 
-	public function initializeCommand():void {}
+	public function initializeCommand():void {
 		addCommandByName(<%= project_name %>Event.CREATE_SESSION, SessionsCommand);
 		addCommandByName(<%= project_name %>Event.DESTROY_SESSION, SessionsCommand);	
-<% for model in model_names %><% unless model == "#{project_name}ModelLocator" %>
+<% for model in event_names %><% unless model == "#{project_name}ModelLocator" %>
 		// Command for the <%= model %> model...
 		addCommandByName(<%= project_name %>Event.LIST_<%= model.pluralize.upcase %>, <%= model %>Command);
 		addCommandByName(<%= project_name %>Event.SHOW_<%= model.upcase %>, <%= model %>Command);
