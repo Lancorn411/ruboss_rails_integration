@@ -34,6 +34,10 @@ class RubossControllerGenerator < Rails::Generator::Base
     record do |m|      
       m.template 'controller.as.erb', File.join("app/flex/#{base_folder}/controllers", 
         "#{command_controller_name}.as")
+      m.template 'events.as.erb', File.join("app/flex/#{base_folder}/controllers", 
+        "RESTful#{project_name}Event.as")
+      m.template 'model_locator.as.erb', File.join("app/flex/#{base_folder}/models", 
+        "#{project_name}ModelLocator.as")
     end
   end
 

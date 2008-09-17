@@ -63,6 +63,14 @@ class RubossConfigGenerator < Rails::Generator::Base
     record do |m|
       if !options[:app_only]
         m.file 'flex.properties', '.flexProperties'
+        
+        if @use_air
+          m.template 'actionscriptair.properties', '.actionScriptProperties'
+          m.template 'projectair.properties', '.project'
+        else
+          m.template 'actionscript.properties', '.actionScriptProperties'
+          m.template 'project.properties', '.project'
+        end
   
         m.directory 'html-template/history'      
         %w(index.template.html AC_OETags.js playerProductInstall.swf).each do |file|
@@ -78,59 +86,10 @@ class RubossConfigGenerator < Rails::Generator::Base
         end
         
         m.directory "app/flex/#{base_folder}/components/generated"
-        
-        # If you specify using Cairngorm Architecture, import these main classes:
-        # AppController.as < FrontController, ModelLocator.as < ModelLocator, Events.as
-        if options[:cairngorm]
-          if @use_air
-            m.template 'cairngorm/actionscriptair.properties', '.actionScriptProperties'
-            m.template 'cairngorm/projectair.properties', '.project'
-          else
-            m.template 'cairngorm/actionscript.properties', '.actionScriptProperties'
-            m.template 'cairngorm/project.properties', '.project'
-          end
+        m.directory "app/flex/#{base_folder}/components/generated/users"
           
-          # Add Cairngorm.SWC to path
-          m.directory "app/flex/lib"
-          m.file 'cairngorm/Cairngorm.swc', 'app/flex/lib/Cairngorm.swc'
-          
-          # Create directories for Cairngorm classes...
-          m.directory "app/flex/#{base_folder}/components/generated/users"
-          m.directory "app/flex/#{base_folder}/commands"
-          
-          # Create assets directory for images...
-          m.directory "app/flex/assets/images"
-          m.file 'cairngorm/cairngorm.gif', 'app/flex/assets/images/cairngorm.gif'
-          
-          # Add CairngormUtils for Event Dispatching
-          m.directory "app/flex/com/pomodo/utils"
-          m.file 'cairngorm/CairngormUtils.as', 'app/flex/com/pomodo/utils/CairngormUtils.as'
-
-          # Add AppController and AppEvents to the project
-          m.template 'cairngorm/app_controller.as.erb',
-            File.join("app", "flex", base_folder, "controllers", "AppController.as")
-
-          # Add the Model Locator, which holds only application states
-          m.template 'cairngorm/model_locator.as.erb',
-            File.join("app", "flex", base_folder, "models", "#{project_name}ModelLocator.as")
-
-          # Add the main Events class, which holds a list of all Event Types
-          m.template 'cairngorm/events.as.erb', File.join("app", "flex", base_folder, "controllers", "#{project_name}Events.as")
-          
-          # Main Application file.  Each application starts with a 1) Account Screen and 2) Main Screen
-          m.template 'cairngorm/main_box.mxml.erb', File.join('app/flex', base_folder, 'components/generated/users', "MainBox.mxml")
-
-          m.template 'cairngorm/mainapp.mxml', File.join('app/flex', "#{project_name}.mxml")
-          m.template 'cairngorm/mainair-app.xml', File.join('app/flex', "#{project_name}-app.xml") if @use_air
-        else
-          if @use_air
-            m.template 'actionscriptair.properties', '.actionScriptProperties'
-            m.template 'projectair.properties', '.project'
-          else
-            m.template 'actionscript.properties', '.actionScriptProperties'
-            m.template 'project.properties', '.project'
-          end
-        end
+        # Main Application file.  Each application starts with a 1) Account Screen and 2) Main Screen
+        m.template 'main_box.mxml.erb', File.join('app/flex', base_folder, 'components/generated/users', "MainBox.mxml")
         
         # Ruboss Framework
         framework_distribution_url = "http://ruboss.com/releases/ruboss-#{FRAMEWORK_RELEASE}.swc"
@@ -149,10 +108,8 @@ class RubossConfigGenerator < Rails::Generator::Base
         m.dependency 'ruboss_controller', @args
       end
       
-      unless options[:cairngorm]
-        m.template 'mainapp.mxml', File.join('app/flex', "#{project_name}.mxml")
-        m.template 'mainair-app.xml', File.join('app/flex', "#{project_name}-app.xml") if @use_air
-      end
+      m.template 'mainapp.mxml', File.join('app/flex', "#{project_name}.mxml")
+      m.template 'mainair-app.xml', File.join('app/flex', "#{project_name}-app.xml") if @use_air
     end
   end
 
@@ -179,8 +136,6 @@ class RubossConfigGenerator < Rails::Generator::Base
         "Default: false") { |v| options[:air_config] = v }
       opt.on("-s", "--skip-framework", "Don't fetch the latest framework binary. You'll have to link/build the framework yourself.", 
         "Default: false") { |v| options[:skip_framework] = v }
-      opt.on("-c", "--cairngorm", "Wire up your Flexible Rails application using the Cairngorm Framework.", 
-        "Default: false") { |v| options[:cairngorm] = v }
     end
 
     def banner

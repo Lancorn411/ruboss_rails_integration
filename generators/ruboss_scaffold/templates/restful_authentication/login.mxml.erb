@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" label="Login"
+  xmlns:rcomponents="org.ruboss.components.*">
+<mx:Script><![CDATA[
+  import org.ruboss.Ruboss;
+  import org.ruboss.controllers.RubossCommandsController;
+
+  import <%= base_package %>.controllers.<%= project_name %>Event;
+
+  import com.pomodo.validators.ServerErrors;
+
+  [Bindable]
+  
+  private function sendSessionData(eventType:String):void {
+
+	RubossCommandsController.execute(eventType, {login: loginTI.text, password: passwordTI.text});
+  }
+
+]]></mx:Script>
+  <mx:Form labelWidth="150">
+    <mx:FormItem required="true" label="Username">
+        <mx:TextInput id="loginTI"/>
+    </mx:FormItem>
+    <mx:FormItem required="true" label="Password">
+        <mx:TextInput id="passwordTI"
+            displayAsPassword="true"/>
+    </mx:FormItem>
+    <mx:FormItem>
+        <mx:Button id="loginButton" label="Login"
+            click="sendSessionData(<%= project_name %>Event.CREATE_SESSION)"/>
+    </mx:FormItem>
+  </mx:Form>
+</mx:VBox>

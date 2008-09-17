@@ -1,0 +1,53 @@
+package <%= base_package %>.models {
+<% if has_manies.length > 0 -%>
+  import org.ruboss.models.ModelsCollection;
+<% end -%>
+  import org.ruboss.models.RubossModel;
+
+  [Resource(name="<%= class_name.downcase.pluralize %>")]
+  [Bindable]
+  public class <%= class_name %> extends RubossModel {
+
+    public static const LABEL:String = "login";
+
+<% for attribute in attributes -%>
+<% if attribute.type == :datetime -%>
+    [DateTime]
+<% end -%>
+    public var <%= attribute.flex_name %>:<%= attribute.flex_type %>;
+
+<% end -%>
+<% for model in belongs_tos -%>
+    [BelongsTo]
+    public var <%= model.camelcase(:lower) %>:<%= model.camelcase %>;
+
+<% end -%>
+<% for model in has_ones -%>
+    [HasOne]
+    public var <%= model.camelcase(:lower) %>:<%= model.camelcase %>;
+    
+<% end -%>
+<% for model in has_manies -%>
+    [HasMany]
+    public var <%= model.camelcase(:lower) %>:ModelsCollection;
+    
+<% end -%>
+	
+    public var login:String;
+    
+    public var email:String;
+    
+    public var firstName:String;
+    
+    public var lastName:String;
+    
+    public var password:String;
+
+    /**
+     * Constructor.
+     */
+    public function <%= class_name %>() {
+		super(LABEL);
+    }
+  }
+}

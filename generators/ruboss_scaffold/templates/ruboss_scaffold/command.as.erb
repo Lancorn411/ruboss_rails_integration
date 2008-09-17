@@ -1,0 +1,110 @@
+package <%= base_package %>.commands {
+
+	import org.ruboss.Ruboss;
+	import org.ruboss.events.RubossEvent;
+	import org.ruboss.controllers.ICommand;
+	import org.ruboss.utils.RubossUtils;
+	
+	import <%= base_package %>.models.<%= class_name %>;
+	import <%= base_package %>.controllers.RESTful<%= project_name %>Event;
+
+	public class RESTful<%= class_name %>Commands implements ICommand {
+	
+		private var _<%= class_name.downcase_first_letter %>:<%= class_name %>;
+	
+    	/**
+     	 * Command Constructor.
+     	 * Creates the <%= class_name %>Model from the RubossEvent data.
+	 	 * This allows common RESTful functions (show, create, update, delete)
+	 	 * to be reused by multiple views, thereby following the DRY principle.
+     	 */
+    	public function RESTful<%= class_name %>Commands() {
+			super();
+		}
+	
+		public function execute(event:RubossEvent):void {
+			_<%= class_name.downcase_first_letter %> = event.data as <%= class_name %>;
+
+			switch(event.type)
+        	{
+            	case <%= project_name %>Event.LIST_<%= class_name.pluralize.upcase %>:
+                	list<%= class_name.pluralize %>();  
+                	break;
+				case <%= project_name %>Event.SHOW_<%= class_name.upcase %>:
+                	show<%= class_name %>();  
+                	break;
+				case <%= project_name %>Event.CREATE_<%= class_name.upcase %>:
+					create<%= class_name %>();
+					break;
+				case <%= project_name %>Event.UPDATE_<%= class_name.upcase %>:
+					update<%= class_name %>();
+					break;
+				case <%= project_name %>Event.DESTROY_<%= class_name.upcase %>:
+					destroy<%= class_name %>();
+					break;
+        	}
+		}
+	
+    	/**
+     	 * GET /<%= class_name.downcase_first_letter.pluralize %>
+	 	 * GET /<%= class_name.downcase_first_letter.pluralize %>.xml
+	 	 * GET /<%= class_name.downcase_first_letter.pluralize %>.fxml
+     	 */
+    	public function list<%= class_name.pluralize %>():void {
+			Ruboss.models.index(<%= class_name %>);
+			//If you want to pass metadata to the rails controller, then do something like this:
+			//Ruboss.models.index(<%= class_name %>, {metadata: {<%= resource_controller_name %>_id:_<%= class_name.downcase_first_letter %>.id}});
+			//The {metadata} will be accessed through the params[:<%= resource_controller_name %>_id] hash in Ruby.
+		}
+		
+		/**
+     	 * GET /<%= class_name.downcase_first_letter.pluralize %>
+	 	 * GET /<%= class_name.downcase_first_letter.pluralize %>.xml
+	 	 * GET /<%= class_name.downcase_first_letter.pluralize %>.fxml
+     	 */
+		public function show<%= class_name %>():void {
+			_<%= class_name.downcase_first_letter %> = RubossUtils.clone(_<%= class_name.downcase_first_letter %>) as <%= class_name %>;	    
+		}
+
+    	/**
+     	 * POST /<%= class_name.downcase_first_letter %>
+	 	 * POST /<%= class_name.downcase_first_letter %>.xml
+	 	 * POST /<%= class_name.downcase_first_letter %>.fxml
+     	 */
+		public function create<%= class_name %>():void {
+			_<%= class_name.downcase_first_letter %>.create({afterCallback: on<%= class_name %>Create});
+		}
+	
+    	/**
+     	 * PUT /<%= class_name.downcase_first_letter %>/1
+	 	 * PUT /<%= class_name.downcase_first_letter %>/1.xml
+	 	 * PUT /<%= class_name.downcase_first_letter %>/1.fxml
+     	 */
+		public function update<%= class_name %>():void {
+			_<%= class_name.downcase_first_letter %>.update({afterCallback: on<%= class_name %>Update});
+		}
+	
+    	/**
+     	 * DELETE /<%= class_name.downcase_first_letter %>/1
+	 	 * DELETE /<%= class_name.downcase_first_letter %>/1.xml
+	 	 * DELETE /<%= class_name.downcase_first_letter %>/1.fxml
+     	 */
+		public function destroy<%= class_name %>():void {
+			_<%= class_name.downcase_first_letter %>.destroy({afterCallback: on<%= class_name %>Destroy});
+		}
+		
+		// PRIVATE CLASSES
+		
+		private function on<%= class_name %>Create(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
+			_<%= class_name.downcase_first_letter %> = new <%= class_name %>;
+		}
+
+		private function on<%= class_name %>Update(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
+			_<%= class_name.downcase_first_letter %> = RubossUtils.clone(<%= class_name.downcase_first_letter %>) as <%= class_name %>;
+		}
+
+		private function on<%= class_name %>Destroy(<%= class_name.downcase_first_letter %>:<%= class_name %>):void {
+			on<%= class_name %>Create(<%= class_name.downcase_first_letter %>);
+		}
+	}
+}

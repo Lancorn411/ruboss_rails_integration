@@ -1,0 +1,28 @@
+package <%= base_package %>.controllers {
+
+	import flash.events.*;
+	
+	public final class RESTful<%= project_name %>Event {
+
+		/**
+     	 * List of RESTful Event types for the application.
+	 	 * Each model defaults with LIST, CREATE, UPDATE, DESTROY events.
+		 * Edit this as you see fit.
+     	 */
+		
+		// Events for starting and stopping a user session.
+		// These are only useful if you have user authentication.
+		public static const CREATE_SESSION:String = "create_session";
+		public static const DESTROY_SESSION:String = "destroy_session";
+
+<% for model in model_names -%>
+		// Events for the <%= model %> model...
+		public static const LIST_<%= model.pluralize.upcase %>:String = "list_<%= model.downcase.pluralize %>";
+		public static const SHOW_<%= model.upcase %>:String = "show_<%= model.downcase %>";
+		public static const CREATE_<%= model.upcase %>:String = "create_<%= model.downcase %>";
+		public static const UPDATE_<%= model.upcase %>:String = "update_<%= model.downcase %>";
+		public static const DESTROY_<%= model.upcase %>:String = "destroy_<%= model.downcase %>";
+		
+<% end -%>
+	}
+}

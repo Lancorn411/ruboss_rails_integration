@@ -1,6 +1,7 @@
 package <%= base_package %>.controllers {
   import <%= base_package %>.models.*;
   import <%= base_package %>.commands.*;
+  import <%= base_package %>.controllers.<%= project_name %>Events;
 	
   import org.ruboss.Ruboss;
   import org.ruboss.controllers.RubossCommandsController;
@@ -10,6 +11,8 @@ package <%= base_package %>.controllers {
   import org.ruboss.controllers.ICommand;
   import org.ruboss.controllers.RubossCommandsEventDispatcher;
 
+  import <%= base_package %>.commands.*;
+
   public class <%= command_controller_name %> extends RubossCommandsController {
     private static var controller:<%= command_controller_name %>;
     
@@ -17,9 +20,23 @@ package <%= base_package %>.controllers {
     
     public function <%= command_controller_name %>(enforcer:SingletonEnforcer, extraServices:Array,
       defaultServiceId:int = -1) {
-      super([<%= command_names %>] /* Commands */, 
-        models, extraServices, defaultServiceId);
+      super(models, extraServices, defaultServiceId);
+	  
+	  initializeCommands();
     }
+
+	public function initializeCommands():void {}
+		addCommandByName(<%= project_name %>Event.CREATE_SESSION, SessionsCommand);
+		addCommandByName(<%= project_name %>Event.DESTROY_SESSION, SessionsCommand);	
+<% for model in model_names %><% unless model == "#{project_name}ModelLocator" %>
+		// Commands for the <%= model %> model...
+		addCommandByName(<%= project_name %>Event.LIST_<%= model.pluralize.upcase %>, RESTful<%= model %>Commands);
+		addCommandByName(<%= project_name %>Event.SHOW_<%= model.upcase %>, RESTful<%= model %>Commands);
+		addCommandByName(<%= project_name %>Event.CREATE_<%= model.upcase %>, RESTful<%= model %>Commands);
+		addCommandByName(<%= project_name %>Event.UPDATE_<%= model.upcase %>, RESTful<%= model %>Commands);
+		addCommandByName(<%= project_name %>Event.DESTROY_<%= model.upcase %>, RESTful<%= model %>Commands);
+<% end -%><% end -%>
+	}
     
     public static function get instance():<%= command_controller_name %> {
       if (controller == null) initialize();

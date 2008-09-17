@@ -1,0 +1,33 @@
+package <%= base_package %>.models {
+		
+	import <%= base_package %>.controllers.<%= project_name %>Event;
+	import <%= base_package %>.commands.*;
+	//import <%= base_package %>.models.User;
+	
+	[Bindable]
+	public class <%= project_name %>ModelLocator {
+	
+		public static const VIEWING_ACCOUNT_SCREEN:String = "viewing_account_screen";
+        public static const VIEWING_MAIN_APP:String = "viewing_main_app";
+	
+		public var workflowState:String = VIEWING_ACCOUNT_SCREEN;
+		
+		//Uncomment if you add restful_authentication
+		//public var user:User;
+		
+		private static var modelLocator:<%= project_name %>ModelLocator;
+		
+		public static function getInstance():<%= project_name %>ModelLocator{
+            if (modelLocator == null) {
+                modelLocator = new <%= project_name %>ModelLocator();
+            }
+            return modelLocator;
+        }
+	
+    	public function <%= project_name %>ModelLocator() {
+			if (modelLocator != null) {
+                throw new Error("Only one <%= project_name %>ModelLocator instance may be instantiated.");
+            }
+		}
+	}
+}
