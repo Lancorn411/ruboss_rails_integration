@@ -15,7 +15,7 @@ package <%= base_package %>.controllers {
 		public static const CREATE_SESSION:String = "create_session";
 		public static const DESTROY_SESSION:String = "destroy_session";
 
-<% for model in model_names -%>
+<% for model in event_names -%>
 		// Events for the <%= model %> model...
 		public static const LIST_<%= model.pluralize.upcase %>:String = "list_<%= model.downcase.pluralize %>";
 		public static const SHOW_<%= model.upcase %>:String = "show_<%= model.downcase %>";

@@ -20,7 +20,8 @@ class RubossControllerGenerator < Rails::Generator::Base
               :base_folder, 
               :command_controller_name,
               :model_names, 
-              :command_names
+              :command_names,
+              :event_names
 
   def initialize(runtime_args, runtime_options = {})
     super
@@ -44,14 +45,14 @@ class RubossControllerGenerator < Rails::Generator::Base
   protected
     # These two methods, model_names and list_as_files, are used to
     # create the Events.as class properly
-    def model_names
-      @model_names = []
+    def event_names
+      @event_names = []
       if File.exists?("app/flex/#{base_folder}/models")
-        @model_names = list_as_files("app/flex/#{base_folder}/models")
+        @event_names = list_as_files_for_events("app/flex/#{base_folder}/models")
       end
     end
     
-    def list_as_files(dir_name)
+    def list_as_files_for_events(dir_name)
       Dir.entries(dir_name).grep(/\.as$/).map { |name| name.sub(/\.as$/, "") }
     end
     
