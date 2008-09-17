@@ -3,7 +3,6 @@
   xmlns:rcomponents="org.ruboss.components.*">
 <mx:Script><![CDATA[
   import org.ruboss.Ruboss;
-  import org.ruboss.controllers.RubossCommandsController;
 
   import <%= base_package %>.controllers.<%= project_name %>Event;
 
@@ -13,7 +12,7 @@
   
   private function sendSessionData(eventType:String):void {
 
-	RubossCommandsController.execute(eventType, {login: loginTI.text, password: passwordTI.text});
+	Ruboss.commands.execute(eventType, {login: loginTI.text, password: passwordTI.text});
   }
 
 ]]></mx:Script>

@@ -14,16 +14,14 @@
   import <%= base_package %>.models.<%= attribute.flex_name.capitalize_without_downcasing %>;
 <% end -%>
 <% end -%>
-  import <%= base_package %>.controllers.<%= project_name %>Events;
-
-  import com.pomodo.utils.CairngormUtils;
+  import <%= base_package %>.controllers.<%= project_name %>Event;
 
   private var appModel:<%= project_name %>ModelLocator = <%= project_name %>ModelLocator.getInstance();
 
   [Bindable]
   private var _<%= class_name.downcase_first_letter %>:<%= class_name %> = new <%= class_name %>();
   
-  private function sendData(eventType:String, metadata:Object=null):void {
+  private function send<%= class_name %>Data(eventType:String, metadata:Object=null):void {
 	if (metadata) {
 		CairngormUtils.dispatchEvent(eventType, metadata);
 	} else {
@@ -47,7 +45,7 @@
 	    _<%= class_name.downcase_first_letter %>.<%= model.camelcase(:lower) %> = <%= model.camelcase %>(<%= model.camelcase(:lower) %>ComboBox.selectedItem);
 <% end -%><% end -%>
 		
-		CairngormUtils.dispatchEvent(eventType, _<%= class_name.downcase_first_letter %>);
+		Ruboss.commands.execute(eventType, _<%= class_name.downcase_first_letter %>);
 	}
   }
 
@@ -89,18 +87,18 @@
     <mx:ControlBar width="100%">
       <mx:Button label="Update <%= class_name %>" width="33%" height="30"
 	    enabled="{<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem != null}"
-	    click="sendData(<%= project_name %>Events.UPDATE_<%= class_name.upcase %>)"/>
+	    click="send<%= class_name %>Data(<%= project_name %>Events.UPDATE_<%= class_name.upcase %>)"/>
 	  <mx:Button label="Delete <%= class_name %>" width="33%" height="30"
 	    enabled="{<%= class_name.downcase_first_letter.pluralize %>DataGrid.selectedItem != null}"
-	    click="sendData(<%= project_name %>Events.DESTROY_<%= class_name.upcase %>)"/>
+	    click="send<%= class_name %>Data(<%= project_name %>Events.DESTROY_<%= class_name.upcase %>)"/>
     </mx:ControlBar>
 	<mx:ControlBar paddingBottom="60" width="100%">
 	  <mx:Button label="Upload" width="33%" height="30"
-		click="sendData(<%= project_name %>Events.UPLOAD_<%= class_name.pluralize.upcase %>)"/>
+		click="send<%= class_name %>Data(<%= project_name %>Events.UPLOAD_<%= class_name.pluralize.upcase %>)"/>
 	  <mx:Button label="Download from Flex" width="33%" height="30"
-		click="sendData(<%= project_name %>Events.DOWNLOAD_<%= class_name.upcase %>, {directory:'assets/images', file:_<%= class_name.downcase_first_letter %>.filename, downloader:'flex'})"/>
+		click="send<%= class_name %>Data(<%= project_name %>Events.DOWNLOAD_<%= class_name.upcase %>, {directory:'assets/images', file:_<%= class_name.downcase_first_letter %>.filename, downloader:'flex'})"/>
 	  <mx:Button label="Download from Rails" width="33%" height="30"
-		click="sendData(<%= project_name %>Events.DOWNLOAD_<%= class_name.upcase %>, {directory:'assets/images', file:'lance.jpg', downloader:'rails'})"/>
+		click="send<%= class_name %>Data(<%= project_name %>Events.DOWNLOAD_<%= class_name.upcase %>, {directory:'assets/images', file:'lance.jpg', downloader:'rails'})"/>
 	</mx:ControlBar>
   </mx:Panel>
   <mx:Panel id="<%= class_name.downcase_first_letter.pluralize %>Panel"

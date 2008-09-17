@@ -4,7 +4,6 @@
   xmlns:cpv="com.pomodo.validators.*">
 <mx:Script><![CDATA[
   import org.ruboss.Ruboss;
-  import org.ruboss.controllers.RubossCommandsController;
 
   import mx.controls.Alert;
   import mx.events.ValidationResultEvent;
@@ -27,7 +26,7 @@
 	_<%= class_name.downcase_first_letter %>.lastName = lastNameTI.text;
 	_<%= class_name.downcase_first_letter %>.password = passwordTI.text;
 
-	RubossCommandsController.execute(eventType, _<%= class_name.downcase_first_letter %>);
+	Ruboss.commands.execute(eventType, _<%= class_name.downcase_first_letter %>);
   }
 
 ]]></mx:Script>

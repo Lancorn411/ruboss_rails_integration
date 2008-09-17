@@ -4,7 +4,6 @@
 <mx:Script><![CDATA[
   import org.ruboss.Ruboss;
   import org.ruboss.utils.RubossUtils;
-  import org.ruboss.controllers.RubossCommandsController;
 
 <% for model in belongs_tos -%>
   import <%= base_package %>.models.<%= model.camelcase %>;
@@ -38,7 +37,7 @@
     _<%= class_name.downcase_first_letter %>.<%= model.camelcase(:lower) %> = <%= model.camelcase %>(<%= model.camelcase(:lower) %>ComboBox.selectedItem);
 <% end -%>
 
-    RubossCommandsController.execute(eventType, _<%= class_name.downcase_first_letter %>);
+    Ruboss.commands.execute(eventType, _<%= class_name.downcase_first_letter %>);
   }
 
 ]]></mx:Script>
