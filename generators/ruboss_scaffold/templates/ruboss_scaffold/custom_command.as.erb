@@ -28,7 +28,7 @@ package <%= base_package %>.commands {
 						 faultHandler: fault
 						 contentType: "application/xml"}).invoke({URL: "<%= controller_plural_name %>.fxml",
 																  method: "POST",
-																  data: _<%= class_name.downcase_first_letter,
+																  data: _<%= class_name.downcase_first_letter %>,
 																  unmarshall: true});
 		}
 		
