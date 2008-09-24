@@ -31,7 +31,7 @@ package <%= base_package %>.commands {
 	
 		public function execute(event:RubossEvent):void {
 			_<%= class_name.downcase_first_letter %> = event.data as <%= class_name %>;
-			metadata = event.data.metadata;
+			metadata = event.data;
 
 			switch(event.type)
         	{
