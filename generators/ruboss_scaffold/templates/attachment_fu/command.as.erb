@@ -35,22 +35,22 @@ package <%= base_package %>.commands {
 
 			switch(event.type)
         	{
-            	case <%= project_name %>Events.LIST_<%= class_name.pluralize.upcase %>:
+            	case <%= project_name %>Event.LIST_<%= class_name.pluralize.upcase %>:
                 	list<%= class_name.pluralize %>();  
                 	break;
-				case <%= project_name %>Events.CREATE_<%= class_name.upcase %>:
+				case <%= project_name %>Event.CREATE_<%= class_name.upcase %>:
 					create<%= class_name %>();
 					break;
-				case <%= project_name %>Events.UPDATE_<%= class_name.upcase %>:
+				case <%= project_name %>Event.UPDATE_<%= class_name.upcase %>:
 					update<%= class_name %>();
 					break;
-				case <%= project_name %>Events.DESTROY_<%= class_name.upcase %>:
+				case <%= project_name %>Event.DESTROY_<%= class_name.upcase %>:
 					destroy<%= class_name %>();
 					break;
-				case <%= project_name %>Events.UPLOAD_<%= class_name.pluralize.upcase %>:
+				case <%= project_name %>Event.UPLOAD_<%= class_name.pluralize.upcase %>:
 					upload<%= class_name %>();
 					break;
-				case <%= project_name %>Events.DOWNLOAD_<%= class_name.upcase %>:
+				case <%= project_name %>Event.DOWNLOAD_<%= class_name.upcase %>:
 					download<%= class_name %>();
 					break; 
         	}

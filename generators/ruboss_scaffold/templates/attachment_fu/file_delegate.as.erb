@@ -12,7 +12,8 @@ package <%= base_package %>.business {
 	import mx.collections.ArrayCollection;
 	import mx.controls.Alert;
 	
-	import <%= base_package %>.models.User;
+	//uncomment all User instances if file uploading is authenticated...
+	//import <%= base_package %>.models.User;
 
 	public class FileDelegate  {
 		private var railsController:String;
@@ -23,7 +24,7 @@ package <%= base_package %>.business {
 		private var downloadFileRef:FileReference;
 		private var filesToUpload:ArrayCollection;
 		private var uploadedFiles:ArrayCollection;
-		private var user:User;
+		//private var user:User;
 
 	    public function FileDelegate(railsController:String) {
 			this.railsController = railsController;
@@ -37,9 +38,9 @@ package <%= base_package %>.business {
 		// UPLOAD FUNCTIONS
 		
 		// Change the "User" to match whatever name you called the user Model. Also the import statement...
-		public function upload(user:User):void
+		public function upload():void //user:User):void
 		{
-			this.user = user;
+			//this.user = user;
 			uploadURL = new URLRequest();
 	        uploadURL.url = railsController + "/upload";
 	
@@ -65,7 +66,7 @@ package <%= base_package %>.business {
 			file.addEventListener(ProgressEvent.PROGRESS, uploadProgressHandler);
 
 			var variables:URLVariables = new URLVariables();
-			variables.user = user;
+			//variables.user = user;
 		
 		    uploadURL.data = variables;
 
