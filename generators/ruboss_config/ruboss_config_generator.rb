@@ -24,7 +24,8 @@ class RubossConfigGenerator < Rails::Generator::Base
               :component_names, 
               :application_tag,
               :use_air,
-              :model_names
+              :model_names,
+              :event_names
 
   def initialize(runtime_args, runtime_options = {})
     super
@@ -134,6 +135,17 @@ class RubossConfigGenerator < Rails::Generator::Base
     end
     
     def list_as_files(dir_name)
+      Dir.entries(dir_name).grep(/\.as$/).map { |name| name.sub(/\.as$/, "") }
+    end
+    
+    def event_names
+      @event_names = []
+      if File.exists?("app/flex/#{base_folder}/models")
+        @event_names = list_as_files_for_events("app/flex/#{base_folder}/models")
+      end
+    end
+    
+    def list_as_files_for_events(dir_name)
       Dir.entries(dir_name).grep(/\.as$/).map { |name| name.sub(/\.as$/, "") }
     end
 
