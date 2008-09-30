@@ -20,6 +20,10 @@ package <%= base_package %>.models {
 	
 	public var filename:String;
 	
+	public var width:int;
+	
+	public var height:int;
+	
 	public var size:int;
 <% for attribute in attributes -%><% unless attribute.name == "with_user" %>
 <% if attribute.type == :datetime -%>

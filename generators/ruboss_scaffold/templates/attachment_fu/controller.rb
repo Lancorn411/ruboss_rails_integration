@@ -80,7 +80,7 @@ class <%= class_name.pluralize %>Controller < ApplicationController
   def upload
     @file_data = params[:Filedata]
     @file_name = params[:Filename]
-    # the :user parameter below comes straight from the URLVariables "user" in Flex!
+    # the :user parameter below comes straight from the URLVariables "user" in Flex!<% if with_user %>
     if params[:user]
       @login = params[:user]
       @<%= with_user %> = <%= with_user.to_s.capitalize %>.find(:first, :conditions => {:login => @login})
@@ -91,6 +91,10 @@ class <%= class_name.pluralize %>Controller < ApplicationController
       @<%= file_name %> = <%= class_name %>.create!(:uploaded_data => @file_data,
                 :directory => "assets/<%= table_name %>")
     end
+    <% else %>
+    	@<%= file_name %> = <%= class_name %>.create!(:uploaded_data => @file_data,
+                :directory => "assets/<%= table_name %>")
+    <% end -%>
     respond_to do |format|
       if @<%= file_name %>.save
         format.xml  { render :xml => @<%= file_name %> }

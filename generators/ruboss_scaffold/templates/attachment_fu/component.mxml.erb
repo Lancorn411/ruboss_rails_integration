@@ -40,6 +40,8 @@
 <% end -%><% end -%><% end -%>
 	    _<%= class_name.downcase_first_letter %>.directory = directoryTextInput.text;
 	    _<%= class_name.downcase_first_letter %>.filename = filenameTextInput.text;
+		_<%= class_name.downcase_first_letter %>.width = widthTextInput.text;
+		_<%= class_name.downcase_first_letter %>.height = heightTextInput.text;
 <% for model in belongs_tos -%><% if model.to_s == with_user.to_s %>
 		_<%= class_name.downcase_first_letter %>.<%= model.camelcase(:lower) %> = appModel.<%= model.camelcase(:lower) %><% else %>
 	    _<%= class_name.downcase_first_letter %>.<%= model.camelcase(:lower) %> = <%= model.camelcase %>(<%= model.camelcase(:lower) %>ComboBox.selectedItem);
@@ -74,6 +76,12 @@
 	  </mx:FormItem>
 	  <mx:FormItem label="Filename" width="100%">
 		<mx:TextInput id="filenameTextInput" width="100%" text="{_<%= class_name.downcase_first_letter %>.filename}"/>
+	  </mx:FormItem>
+	  <mx:FormItem label="Width" width="100%">
+		<mx:TextInput id="widthTextInput" width="100%" text="{_<%= class_name.downcase_first_letter %>.width}"/>
+	  </mx:FormItem>
+	  <mx:FormItem label="Height" width="100%">
+		<mx:TextInput id="heightTextInput" width="100%" text="{_<%= class_name.downcase_first_letter %>.height}"/>
 	  </mx:FormItem>
 <% for model in belongs_tos -%><% if with_user.to_s == model.to_s %><% else %>
       <mx:FormItem label="<%= model.camelcase %>" width="100%">
@@ -131,6 +139,10 @@
 		<mx:DataGridColumn dataField="directory" headerText="Directory"
 		  width="150" minWidth="100"/>
 		<mx:DataGridColumn dataField="filename" headerText="Filename"
+		  width="150" minWidth="100"/>
+		<mx:DataGridColumn dataField="width" headerText="Width"
+		  width="150" minWidth="100"/>
+		<mx:DataGridColumn dataField="height" headerText="Height"
 		  width="150" minWidth="100"/>
 		<mx:DataGridColumn dataField="size" headerText="Size"
 		  width="150" minWidth="100"/>
