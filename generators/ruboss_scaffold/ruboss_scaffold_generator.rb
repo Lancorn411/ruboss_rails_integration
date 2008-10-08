@@ -129,31 +129,9 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
   alias_method  :model_controller_table_name, :model_controller_plural_name
   
   attr_accessor :constructor_args
-                  
-  alias_method  :controller_file_name,  :controller_underscore_name
-  alias_method  :controller_table_name, :controller_plural_name
       
   def initialize(runtime_args, runtime_options = {})
     super
-    
-    if @args.empty?
-      puts <<-USAGE
-  You must supply at least one model attribute (i.e. database column); 
-  it will be used as the label field for generated the ActionScript models.
-  
-  Ruboss scaffold Example:
-  script/generate ruboss_scaffold Task name:string complete:boolean due_date:date_time user_id:integer
-  
-  Attachment Fu with Ruboss scaffold Example:
-  script/generate ruboss_scaffold Task name:string complete:boolean due_date:date_time user_id:integer
-  --attachment
-  
-  Restful Authentication with Ruboss saffold Example:
-  script/generate ruboss_scaffold user sessions --authenticated
-  
-  USAGE
-      exit(0)
-    end
     
     @project_name, @flex_project_name, @command_controller_name, @base_package, @base_folder = extract_names
     
@@ -161,9 +139,9 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
     # This block of code was basically immported from the restful_authentication plugin...
     if options[:authenticated]
       @rspec = has_rspec?
-
-      @controller_name = 'sessions'
+      
       @model_controller_name = @name.pluralize
+      @controller_name = 'sessions'
       
       # sessions controller
       base_name, @controller_class_path, @controller_file_path, @controller_class_nesting, @controller_class_nesting_depth = extract_modules(@controller_name)
