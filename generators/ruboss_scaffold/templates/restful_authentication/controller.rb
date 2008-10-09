@@ -23,6 +23,7 @@ class <%= controller_class_name %>Controller < ApplicationController
       end
       respond_to do |format|
         format.xml  { render :xml => self.current_<%= file_name %>.to_xml }
+        format.fxml  { render :fxml => self.current_<%= file_name %>.to_xml }
       end
     else
       respond_to do |format|
