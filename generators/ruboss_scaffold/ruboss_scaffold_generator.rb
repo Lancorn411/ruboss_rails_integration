@@ -405,6 +405,10 @@ class RubossScaffoldGenerator < Rails::Generator::NamedBase
         end
       end
     end
+      if options[:authenticated]
+        m.route_resource  controller_singular_name
+        m.route_resources model_controller_plural_name
+      end
       if options[:custom_command]
         m.template 'ruboss_scaffold/custom_command.as.erb', File.join('app/flex', base_folder, 'commands', "Custom#{@class_name}Command.as")
       end
