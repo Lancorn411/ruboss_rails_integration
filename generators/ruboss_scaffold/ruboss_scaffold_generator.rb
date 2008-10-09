@@ -75,6 +75,7 @@ module Rails
   end
 end
 
+require 'restful_authentication/rails_commands'
 class RubossScaffoldGenerator < Rails::Generator::NamedBase
   include Ruboss::Configuration 
   
