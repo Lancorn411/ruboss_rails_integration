@@ -24,7 +24,7 @@ package <%= base_package %>.business {
 		private var downloadFileRef:FileReference;
 		private var filesToUpload:ArrayCollection;
 		private var uploadedFiles:ArrayCollection;
-		//private var user:User;
+		//private var userLogin:String;
 
 	    public function FileDelegate(railsController:String) {
 			this.railsController = railsController;
@@ -38,9 +38,10 @@ package <%= base_package %>.business {
 		// UPLOAD FUNCTIONS
 		
 		// Change the "User" to match whatever name you called the user Model. Also the import statement...
-		public function upload():void //user:User):void
+		// You can make this user_authenticated by using the commented versions instead...
+		public function upload() // (userLogin:String):void
 		{
-			//this.user = user;
+			//this.userLogin = userLogin;
 			uploadURL = new URLRequest();
 	        uploadURL.url = railsController + "/upload";
 	
@@ -65,10 +66,10 @@ package <%= base_package %>.business {
 			file.addEventListener(IOErrorEvent.IO_ERROR, uploadIoErrorHandler);
 			file.addEventListener(ProgressEvent.PROGRESS, uploadProgressHandler);
 
-			var variables:URLVariables = new URLVariables();
-			//variables.user = user;
+			// var variables:URLVariables = new URLVariables();
+			// variables.user_login = userLogin;
 		
-		    uploadURL.data = variables;
+		    // uploadURL.data = variables;
 
 			try {
 		        file.upload(uploadURL);

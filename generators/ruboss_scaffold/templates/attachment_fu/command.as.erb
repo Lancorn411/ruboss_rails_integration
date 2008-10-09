@@ -92,7 +92,7 @@ package <%= base_package %>.commands {
 		
 		public function upload<%= class_name %>():void {
 			var delegate:FileDelegate = new FileDelegate(railsController);
-			delegate.upload(<% if with_user %>appModel.<%= with_user.to_s.downcase_first_letter %><% end -%>);
+			delegate.upload(); // use this for authenticated upload: (<% if with_user %>appModel.<%= with_user.to_s.downcase_first_letter %>.login<% end -%>);
 		}
 		
 		public function download<%= class_name %>():void {
