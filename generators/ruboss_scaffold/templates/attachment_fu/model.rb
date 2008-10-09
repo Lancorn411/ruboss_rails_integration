@@ -1,7 +1,7 @@
 class <%= class_name %> < ActiveRecord::Base
   has_attachment :content_type => :image, 
                  :storage => :file_system,
-                 :path_prefix => "public/bin/assets/<%= table_name %>" # Change this for custom file location.
+                 :path_prefix => "public/assets" # Change this for custom file location.
   
 <% for model in belongs_tos -%>
   belongs_to :<%= model %>
